@@ -51,3 +51,49 @@ def positive(x):
 print(positive(3))
 print(positive(10))
 print(positive(11))
+
+def inverse(f):
+    """Return g(y) such that g(f(x))->x."""
+    return lambda y: search(lambda x: f(x) == y)
+sqrt = inverse(square)
+print(square(16))
+print(sqrt(256))
+print(sqrt(16))
+print(sqrt(4))#这个版本的平方根只对完全平方数有效，这不是最理想的平方数实现方法
+#better version：**牛顿法**
+
+
+
+
+
+
+
+
+#Which Values Deserve a Name
+"""
+if sqrt(square(a) + square(b)) > 1:
+    x = x + sqrt(square(a) + square(b))
+#修改后(don't repeat yourself)
+hypotenuse = sqrt(square(a) + square(b))
+if hypotenuse > 1:
+    x = x + hypotenuse
+
+# Meaningful parts of complex expressions:(提取有意义的部分，给它取个名字)
+x = (-b + sqrt(square(b) - 4 * a * c)) / (2 * a)
+#修改后( discriminant 判别式 )
+discriminant = sqrt(square(b) - 4 * a * c)
+x = (-b + discriminant) / (2 * a)
+"""
+
+
+#Errors & Tracebacks 错误和回溯
+
+def f(x):
+    return g(x - 1)
+def g(y):
+    return abs(h(y) - h(1 / y))
+def h(z):
+   return z * z
+print(f(12))    
+#检测到的错误是一种类型错误（TypeError）通常发生在尝试对无法进行算术运算的事物（即不是数字的事物）进行算术运算时发生的错误
+#第96行缺少return 没有返回z值⬆️
