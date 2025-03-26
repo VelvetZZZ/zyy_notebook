@@ -134,3 +134,25 @@ def sum_digits_iter(n):
         digit_sum = digit_sum + last
     return digit_sum
 print(sum_digits_iter(2013))
+
+
+
+
+
+#*******迭代版
+def sum_digits_iterative(n):
+    total = 0           # 初始化累加器
+    while n >= 10:      # 只要不是个位数就继续循环
+        last = n % 10   # 取最后一位数字（即 n 的个位数）
+        total += last   # 把这个个位数累加到 total 中
+        n = n // 10     # 去掉 n 的最后一位，使 n 变成它的前几位
+    return total + n    # 最后加上 n（当 n<10 时，它本身就是最后一位）
+
+#递归版
+def sum_digits(n):
+    if n < 10:       # 如果是个位数（比如3），直接返回
+        return n
+    else:
+        all_but_last = n // 10   # 去掉最后一位（123 → 12）
+        last = n % 10            # 取最后一位（123 → 3）
+        return sum_digits(all_but_last) + last  # 继续处理剩下的数字，并累加最后一位
