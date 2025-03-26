@@ -76,7 +76,7 @@ def sum_digits(n):
         return n 
     else:
         all_but_last, last = split(n)
-        return luhn_sum_double(all_but_last) + last
+        return sum_digits(all_but_last)+ last
 def luhn_sum(n):
     if n < 10:
         return n
