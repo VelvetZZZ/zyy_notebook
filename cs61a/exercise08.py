@@ -48,7 +48,7 @@ print(fact(3))#输出3*2*1
 3.What n evaluates to dapends upon which is the current environment.
 4.Each call to fact solves a aimpler problem than the last:smaller n.
 """
-#Lteration（while） vs Recursion  迭代vs递归
+#Iteration（while） vs Recursion  迭代vs递归
 
 
 def fact_iter(n):
