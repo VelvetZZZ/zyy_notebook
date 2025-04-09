@@ -78,10 +78,45 @@ len(d[1])  # 输出 2，键1对应的列表有两个元素
 len(d[3])  # 输出 5，因为 'third' 是 5 个字符长
 
 #Dictionary Comprehensions 字典推导式
+# Python字典推导式详解
+
+## 1. **字典推导式的基本语法**
+### 核心结构
+"""{ <键表达式>: <值表达式> for <变量> in <可迭代对象> if <过滤条件> }
+#简单版
+{ <键表达式>: <值表达式> for <变量> in <可迭代对象> }
+"""
+# 列表推导式
+print([x**2 for x in range(5)]) #输出列表[0, 1, 4, 9, 16]
+
+# 字典推导式
+print({x: x**2 for x in range(5)}) #输出字典 {0:0, 1:1, 2:4, 3:9, 4:16}
 
 
+"""***字典推导式的执行步骤***
+创建新作用域：基于当前环境新建一个临时作用域（避免变量污染）。
 
+初始化空字典：准备一个空字典作为结果容器。
 
+遍历可迭代对象：
 
+将每次迭代的元素绑定到变量（如x）。
 
+若有if条件，检查条件是否为True。
 
+若条件满足，将键表达式和值表达式计算结果添加到字典。"""
+print({ x: x**2 for x in [1, 2, 3, 4, 5] if x <= 2 })
+
+#Example:Indexing 使指数化
+
+def index(keys, values, match):
+    """Return a dictionary from keys k to a list of values v for which match(k, v) is a true value.
+
+    >>> index([7, 9, 11], range(30, 50), lambda k, v: v % k == 0)
+    {7: [35, 42, 49], 9: [36, 45], 11: [33, 44]}
+    """
+    return {k: [v for v in values if match(k, v)] for k in keys}
+# 调用函数并打印结果
+result = index([7, 9, 11], range(30, 50), lambda k, v: v % k == 0)
+print(result)
+# 输出: {7: [35, 42, 49], 9: [36, 45], 11: [33, 44]}
