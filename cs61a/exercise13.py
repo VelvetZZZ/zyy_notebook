@@ -93,3 +93,69 @@ def leaves(tree):
         return sum([leaves(b) for b in branches(tree)],[])
 
 print(leaves(fib_tree(5)))
+
+
+
+#创建一棵结构一样的新树，只对叶子节点的标签进行 +1
+def increment_leaves(t):
+    """Return a tree like t but with leaf labels incremented(递增)."""
+    if is_leaf(t):
+        return tree(label(t) + 1)
+    else:
+        bs = [increment_leaves(b) for b in branches(t)]
+        return tree(label(t),bs)
+#创建一棵结构一样的新树，对所有节点（包括根节点和所有子节点）都进行 +1。    
+def increment(t):
+    """Return a tree like t but with all labels incremented."""
+    return tree(label(t) + 1, [increment(b) for b in branches(t)])
+    
+#Example:Printing Trees
+def print_tree(t):
+    print(label(t))
+    for b in branches(t):
+        print_tree(b)
+print_tree(fib_tree(4))
+
+print('     '* 5 + str(5))
+
+def print_tree(t, indent=0):
+    print('  ' * indent + str(label(t)))
+    for b in branches(t):
+        print_tree(b, indent+1)
+print_tree(fib_tree(4))
+#The indentation level of a label corresponds to its depth in the tree
+
+#Example:Summing Paths
+def fact(n):
+    if n == 0:
+        return 1
+    else:
+        return n * fact(n -1)
+print(fact(5))
+
+def fact_times(n, k):
+    "Return k * n * (n-1) * ... * 1"
+    if n == 0:
+        return k
+    else:
+        return fact_times(n - 1, k * n)
+
+
+
+from tree import *
+numbers = tree(3,[tree(4), tree(5, [tree(6)])])
+haste = tree('h', [tree('a', [tree('s'),
+                                   tree('t')]),
+                    tree('e')])
+
+def print_sums(t, so_far):
+    so_far = so_far + label(t)
+    if is_leaf(t):
+        print(so_far)
+    else:
+        for b in branches(t):
+            print_sums(b, so_far)
+print(print_sums(numbers, 0))
+print(print_sums(haste, ''))
+
+#Count Paths that have a Total Label Sum
