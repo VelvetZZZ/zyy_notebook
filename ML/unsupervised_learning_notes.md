@@ -90,5 +90,3 @@ print(kmeans.cluster_centers_)
 ```
 
 ---
-
-> 📘 用 Obsidian 做笔记的你，可以添加 #UnsupervisedLearning #MachineLearning 标签方便管理。
