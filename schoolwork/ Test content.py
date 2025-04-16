@@ -97,3 +97,67 @@ elif Currency[0] in ["U","u"]:
     print("RMB{:.2f}".format(R))
 else:
     print("Data error!")
+
+
+#三角函数
+import math
+a = input()
+b = input()
+x = (-int(b)+math.sqrt(2*int(a)*math.sin(math.pi/3)*math.cos(math.pi/3)))/(2*int(a))
+print(x)
+
+#表达式求值
+import math
+x = (-8 + math.sqrt(64-4*5*3))/(2*5)
+print(x)
+
+#身份证号校验
+Is = (7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)
+id = input()
+sum = 0
+for i in range(17):
+    sum = sum + (Is[i]) * int(id[i])
+if id[17]=="X":
+    if sum % 11 == 2:
+        print("身份证号码校验为合法号码！")
+    else:
+        print("身份证校验位错误!")
+elif(sum % 11 + eval(id[17])) % 11 == 1:
+    print("身份证号码校验为合法号码！")
+else:
+    print("身份证校验位错误！")
+
+
+#3位水仙花数计算
+m = int(input())
+n = int(input())
+result = []
+for num in range(m, n+1):
+    a, b, c = map(int,str(num))
+    if a ** 3 + b ** 3 + c ** 3 == num:
+        result.append(str(num))
+print (",".join(result))
+
+
+#同符号数学运算
+import math
+N = int(input())
+abs_N = abs(N)
+
+add_result =int(math.copysign(abs(N)+10, N))
+sub_result =int(math.copysign(abs(N)-10, N))
+mul_result =int(math.copysign(abs(N)*10 ,N))
+print(abs_N, add_result, sub_result, mul_result)
+
+
+#天天向上的力量III
+N = float(input())/1000
+dayup = pow(1+N, 365)
+daydown = pow(1-N, 365)
+ratio = dayup/daydown
+print("{:.2f},{:.2f},{:.0f}".format(dayup,daydown,ratio))
+
+#股票交易收益计算
+buy, sell, quantity = map(float,input().split)
+total_profit = (sell - buy) * quantity
+print("f{total.profit:.1f}元")
