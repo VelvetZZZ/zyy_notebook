@@ -81,4 +81,16 @@ print(next(k))
 #如果改变的是字典中已存在键的值，而不是添加或删除键（即不改变字典的大小），那么迭代通常可以继续（尽管这仍然可能导致逻辑上的困惑，但不会直接触发 RuntimeError）。(对键、值、项都一样)
 
 #For Statements
+r = range(3, 6)
+ri = iter(r)
+for i in ri:
+    print(i)
+for i in ri:
+    print(i)#see nothing
 
+for i in r:
+    print(i)
+for i in r:
+    print(i)
+
+#Built-In Iterator Functions
