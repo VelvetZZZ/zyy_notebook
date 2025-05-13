@@ -9,7 +9,7 @@ for i in str:
 #照猫画虎求阶乘
 n = int(input())
 sum = 1
-for i in range (n, n+1):
+for i in range (1, n+1):
     sum *= i
 print(sum)
 
@@ -53,8 +53,8 @@ if eval(a[0:-1])>0:
         print("Data error!")
 
 #计算矩形面积
-a = eval(input(""))
-b = eval(input(""))
+a = float(input())
+b = float(input())
 print("{:.2f}".format(a*b))
 
 #成绩转换
@@ -161,3 +161,5 @@ print("{:.2f},{:.2f},{:.0f}".format(dayup,daydown,ratio))
 buy, sell, quantity = map(float,input().split)
 total_profit = (sell - buy) * quantity
 print("f{total.profit:.1f}元")
+
+
