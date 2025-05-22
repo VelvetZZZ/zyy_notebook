@@ -85,12 +85,13 @@ r = range(3, 6)
 ri = iter(r)
 for i in ri:
     print(i)
+
 for i in ri:
     print(i)#see nothing
 
 for i in r:
     print(i)
 for i in r:
-    print(i)
+    print(i)#for statement->able to go through the entire contents from beginning to end without worrying about changing.
 
 #Built-In Iterator Functions
