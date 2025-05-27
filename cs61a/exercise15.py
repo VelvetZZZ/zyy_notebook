@@ -94,4 +94,12 @@ for i in r:
 for i in r:
     print(i)#for statement->able to go through the entire contents from beginning to end without worrying about changing.
 
-#Built-In Iterator Functions
+#Built-In Iterator Functions迭代的内建函数 
+bcd = ['b', 'c', 'd']
+print([x.upper() for x in bcd])
+
+map(lambda x: x.upper(), bcd)
+m = map(lambda x: x.upper(), bcd)
+print(next(m))
+print(next(m))
+print(next(m))

@@ -130,3 +130,94 @@ v_iter = iter(d.values())
 # 遍历项
 i_iter = iter(d.items())
 # next(i_iter) -> ('one', 1), next(i_iter) -> ('two', 2), next(i_iter) -> ('zero', 0)
+
+
+
+
+# Python 迭代内建函数学习笔记
+
+本笔记总结了 Python 中用于高效迭代的关键内建函数，重点解释了它们的工作方式和使用场景。
+
+## 核心概念
+
+* **可迭代对象 (Iterable):** 一个能够一次返回一个其成员的对象。例如：列表 (`[]`)、元组 (`()`)、字符串 (`""`)、字典 (`{}`)、集合 (`{}`)、`range()` 对象。
+* **迭代器 (Iterator):** 代表数据流的对象。它通过 `next()` 方法一次返回一个元素。迭代器是“惰性的”并且是有状态的（它们会记住当前的位置）。
+    * **惰性计算 (Lazy Evaluation):** 仅在被请求时才计算值，从而节省内存和处理时间。
+    * **一次性使用:** 一旦迭代器的所有元素都被检索完毕（即迭代器被耗尽），它就不能被重置或重用。你需要从原始的可迭代对象重新创建一个新的迭代器。
+* **`func` (作为参数的函数):** 许多迭代函数接受另一个函数作为参数，这个函数会被应用于可迭代对象的元素上。这可以是一个预先定义的函数，也可以是一个 `lambda` 函数。
+
+## 返回迭代器的函数
+
+这些函数执行操作并返回一个迭代器，该迭代器会惰性地生成结果。
+
+1.  **`map(function, iterable, ...)`**
+    * **用途：** 将 `function` 应用于 `iterable` 的每个元素，并返回一个包含这些结果的迭代器。
+    * **语法：** `map(我的函数, 我的列表)`
+    * **示例：**
+        ```python
+        numbers = [1, 2, 3]
+        # 为简单起见，使用 lambda 函数
+        squared_iterator = map(lambda x: x**2, numbers)
+        # print(list(squared_iterator)) # 输出: [1, 4, 9]
+        ```
+
+2.  **`filter(function, iterable)`**
+    * **用途：** 从 `iterable` 的元素中构造一个迭代器，这些元素使得 `function` 返回 `True`。
+    * **语法：** `filter(我的布尔函数, 我的列表)`
+    * **示例：**
+        ```python
+        ages = [12, 18, 25, 30]
+        adults_iterator = filter(lambda x: x >= 18, ages)
+        # print(list(adults_iterator)) # 输出: [18, 25, 30]
+        ```
+
+3.  **`zip(*iterables)`**
+    * **用途：** 聚合来自每个可迭代对象的元素。返回一个元组的迭代器，其中第 i 个元组包含来自每个参数可迭代对象的第 i 个元素。
+    * **停止条件：** 当最短的输入可迭代对象耗尽时，迭代停止。
+    * **语法：** `zip(可迭代对象1, 可迭代对象2, ...)`
+    * **示例：**
+        ```python
+        names = ['爱丽丝', '鲍勃']
+        scores = [90, 85]
+        zipped_iterator = zip(names, scores)
+        # print(list(zipped_iterator)) # 输出: [('爱丽丝', 90), ('鲍勃', 85)]
+        ```
+
+4.  **`reversed(sequence)`**
+    * **用途：** 返回一个反向迭代器。
+    * **`sequence` (序列)：** 必须是一个具有 `__reversed__()` 方法或支持序列协议（`__len__()` 方法和 `__getitem__()` 方法）的对象。常见的序列有列表、元组、字符串和范围 (range)。
+    * **语法：** `reversed(我的序列)`
+    * **示例：**
+        ```python
+        my_string = "abc"
+        reversed_char_iterator = reversed(my_string)
+        # print(list(reversed_char_iterator)) # 输出: ['c', 'b', 'a']
+        ```
+
+## 消耗迭代器/创建集合的函数
+
+这些函数接受一个可迭代对象（可以是迭代器）作为输入，并通常返回一个新的集合（如列表、元组），从而在此过程中“消耗”掉迭代器。
+
+1.  **`list(iterable)`**
+    * **用途：** 从可迭代对象的元素创建一个列表。
+    * **示例：** `my_list = list(map(str, [1, 2, 3])) # 得到 ['1', '2', '3']`
+
+2.  **`tuple(iterable)`**
+    * **用途：** 从可迭代对象的元素创建一个元组。
+    * **示例：** `my_tuple = tuple(filter(lambda x: x > 0, [-1, 0, 1])) # 得到 (1,)`
+
+3.  **`sorted(iterable, *, key=None, reverse=False)`**
+    * **用途：** 从 `iterable` 中的元素返回一个新的已排序的**列表**。
+    * **`key` (可选参数)：** 一个在进行比较之前对每个元素调用的函数。
+    * **`reverse` (可选参数)：** 如果为 `True`，则按降序排序。
+    * **示例：**
+        ```python
+        numbers = [3, 1, 4, 1, 5, 9]
+        sorted_numbers = sorted(numbers) # 结果: [1, 1, 3, 4, 5, 9]
+        desc_sorted_numbers = sorted(numbers, reverse=True) # 结果: [9, 5, 4, 3, 1, 1]
+        ```
+
+## “惰性计算”的重要性
+
+* **内存效率：** 计算是按需进行的，因此无需一次将所有结果存储在内存中。这对于大型或潜在无限的数据流至关重要。
+* **性能：** 如果并非所有结果都需要，则避免了不必要的计算。
