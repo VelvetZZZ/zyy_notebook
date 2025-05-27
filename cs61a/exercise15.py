@@ -132,3 +132,27 @@ print(list(reversed(t)))
 print(list(reversed(t)) == t)#list & list
 
 #The Zip Function 遍历共同索引元组的迭代器
+list1 = [1, 2]
+list2 = [3, 4]
+zipped_items = zip(list1, list2)
+print(list(zipped_items)) 
+
+print(list(zip([1, 2],[3, 4, 5],[6, 7])))
+
+#Implement palindrome,which returns whether s is the same forward and backward
+def palindrome(s):
+  """
+  判断一个序列 s 是否是回文。
+  s 可以是列表、元组或字符串。
+  """
+  return s == s[::-1] # s[::-1] 是 Python 中获取序列反转副本的简洁方法
+print(palindrome([3, 1, 4, 1, 3]))
+print(palindrome([3, 1, 4, 1, 5]))
+#同理
+def palindrome(s):
+    return list(s) == list(reversed(s))
+print(palindrome([3, 1, 4, 1, 3]))
+#同理
+def palindrome(s):
+    return all([a == b for a, b in zip(s, reversed(s))])
+print(palindrome([3, 1, 4, 1, 3]))
