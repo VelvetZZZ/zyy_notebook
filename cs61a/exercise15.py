@@ -103,3 +103,32 @@ m = map(lambda x: x.upper(), bcd)
 print(next(m))
 print(next(m))
 print(next(m))
+
+def double(x):
+    print('**', x, '=>', 2*x, '**')
+    return 2*x#在 Python 中，如果一个函数没有明确的 return 语句，它会默认返回 None.
+map(double, [3, 5, 7])
+m = map(double, [3, 5, 7])
+print(next(m))
+print(next(m))
+print(next(m))#double applied lazily
+
+m = map(double, range(3, 7))
+f = lambda y: y >= 10
+t = filter(f, m)#创建一个过滤函数
+print(next(t))
+print(next(t))
+
+print(list(t))#3-6已经遍历完啦【Done】
+
+print(list(filter(f, map(double, range(3, 7)))))
+
+
+#trap
+t = [1, 2, 3, 2, 1]
+print(reversed(t))
+print(reversed(t) == t)#iterator & list --> false
+print(list(reversed(t)))
+print(list(reversed(t)) == t)#list & list
+
+#The Zip Function 遍历共同索引元组的迭代器
