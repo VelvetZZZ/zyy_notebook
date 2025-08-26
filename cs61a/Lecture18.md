@@ -85,3 +85,43 @@ your_car.drive()                # 调用对象的方法，输出: 一辆白色�
 	•	`pop
 
 # A class describes the behavior of its instances
+
+## 🧱 类的结构拆解（以 `Account` 为例）
+
+### 🛠️ 1. 定义类
+```python
+class Account:
+```
+这是在定义一个类，叫做 Account，以后我们可以通过它来创建账户。
+
+### 2. 初始化方法 __init__
+```python
+def __init__(self, account_holder):
+    self.balance = 0
+    self.holder = account_holder
+```
+	•	__init__() 是一个特殊的方法，用于在创建对象时初始化属性。
+	•	self 指当前这个账户对象（就是你创建的那个账户）。
+	•	self.balance = 0：账户初始余额为 0。
+	•	self.holder = account_holder：账户持有人设置为传入的名字。
+
+### 3. 存钱方法 deposit
+```python
+def deposit(self, amount):
+    self.balance = self.balance + amount
+    return self.balance
+```
+	•	把指定的 amount 存入账户。
+	•	更新余额后返回当前余额。
+
+### 4. 取钱方法 withdraw
+```python 
+def withdraw(self, amount):
+    if amount > self.balance:
+        return 'Insufficient funds'
+    self.balance = self.balance - amount
+    return self.balance
+```
+	•	检查余额够不够。
+	•	如果不够：返回 'Insufficient funds'
+	•	如果够：扣掉金额，更新余额并返回。
