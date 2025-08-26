@@ -83,3 +83,5 @@ your_car.drive()                # 调用对象的方法，输出: 一辆白色�
 	•	extend([a, b]) → 扩展列表
 	•	insert(i, x) → 在指定位置插入
 	•	`pop
+
+# A class describes the behavior of its instances
