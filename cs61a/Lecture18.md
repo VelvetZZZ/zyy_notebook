@@ -183,3 +183,44 @@ lst.append(4)      # 👉 调用 append 方法，向列表添加 4
 原因是：
 	•	append 是 list 类里的方法（定义在 class List 里）。
 	•	lst 是对象，lst.append 表示“lst 对象的 append 方法”。
+
+
+当你执行 a = Account('Alan') 时，Python 会：
+	1.	创建一个空的对象 a
+	2.	调用 __init__() 方法，把 'Alan' 传进去
+	3.	在这个对象 a 上添加属性 balance = 0 和 holder = 'Alan'
+
+# Object Identity
+在 Python 中，每次调用类（比如 Account(...)）都会创建一个全新的对象（instance），这些对象有自己独立的属性和内存地址。使用 is 可以判断两个变量是否指向同一个对象，而 = 赋值只是建立名字引用，不会复制对象本身。
+
+# Invoking Methods 调用方法
+
+## 📌 1. 方法调用的本质
+
+在类中定义的方法（比如 `deposit`），格式如下：
+
+```python
+def deposit(self, amount):
+    self.balance = self.balance + amount
+    return self.balance
+```
+	•	方法总是定义为带两个参数：self 和你要传入的值（比如 amount）。
+	•	self 表示当前对象本身（谁调用这个方法，self 就代表谁）。
+
+ ## 2. 使用点表达式调用方法
+```python
+tom_account = Account('Tom')
+tom_account.deposit(100)
+```
+tom_account.deposit(100) 相当于 deposit(tom_account, 100)
+
+##  3. 点表达式 = 自动补全第一个参数
+形式                  实际调用方式         解释
+obj.method(x)   Class.method(obj, x)   自动将 obj 作为 self 传入
+
+这就是为什么你定义方法时一定要加 self，即使你在调用时不写它。
+
+## 4. 总结知识点
+	•	所有类中的方法都必须把 self 作为第一个参数。
+	•	当你用点表达式调用方法时，Python 会自动把调用者当作 self 传进去。
+	•	所以你写的 deposit(100) 实际上是 deposit(tom_account, 100)。
