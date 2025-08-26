@@ -125,3 +125,61 @@ def withdraw(self, amount):
 	•	检查余额够不够。
 	•	如果不够：返回 'Insufficient funds'
 	•	如果够：扣掉金额，更新余额并返回。
+
+# 点表达式(Dot Expression)
+
+格式：   对象.属性
+        对象.方法()
+示例：
+```python
+
+a = Account('John')   # 创建对象 a
+a.balance             # 访问属性 balance，得到 0
+a.deposit(10)         # 调用方法 deposit，给账户存入 10       
+```
+
+## 为什么要用点表达式？
+
+因为在面向对象编程中：
+	•	每个对象都“拥有”自己的属性和方法。
+	•	用 对象.属性 或 对象.方法()，就像是在说：“这个对象自己的 xxx”。
+
+点（.）告诉 Python：
+
+“我要从这个具体的对象身上，去拿某个东西（属性或方法）”。
+
+## 属性 vs 方法 的点表达式区别
+
+类型       示例          说明
+属性     a.balance      没有括号，表示这是一个“值”
+方法     a.deposit(10)  有括号，表示要“执行”某个动作
+### PS:
+```python
+a.append       # 这是指向函数对象 append 本身（不执行）
+a.append(...)  # 加了括号才是调用（执行）方法
+```
+## ❓属性/方法的名字是固定的吗？
+-不是固定的，但它们是 类里定义好的，只有写在类里、用 self.xxx = ... 定义的属性，和 def xxx(self): 定义的方法，才能被访问。
+
+比如：
+```python
+class Account:
+    def __init__(self, holder):
+        self.balance = 0
+        self.holder = holder
+```
+那么 balance 和 holder 是你可以访问的“点表达式名称”。你也可以在类中自定义你喜欢的名字，比如：
+```python
+self.owner_name = holder
+print(a.owner_name)
+```
+举例对比：append 和 a.append()
+```python
+lst = [1, 2, 3]
+
+lst.append         # 👉 返回方法对象，不执行
+lst.append(4)      # 👉 调用 append 方法，向列表添加 4
+```
+原因是：
+	•	append 是 list 类里的方法（定义在 class List 里）。
+	•	lst 是对象，lst.append 表示“lst 对象的 append 方法”。
