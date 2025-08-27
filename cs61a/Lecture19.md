@@ -46,3 +46,70 @@ Clown
 类属性（Class Attribute）        定义在类里、__init__ 外的属性，所有对象共享
 实例属性（Instance Attribute）   定义在 __init__ 里，用 self.xxx = ... 赋值，每个对象独立拥有
 使用方式                         类属性可以通过类或对象访问：Account.interest 或 tom_account.interest
+
+## Looking Up Attributes by Name（通过名称查找属性）
+### ✅ 点表达式是什么？
+格式如下：
+<表达式>.<名称>
+比如：
+```python
+tom_account.balance
+Account.interest
+```
+### 🔍 查找流程（很关键！）
+🟢 第一步：Evaluate the <expression> to the left of the dot…
+•先执行点左边的表达式，拿到那个对象。
+•例子：tom_account.balance 中，tom_account 会先被求值为一个 Account 实例。
+🟢 第二步：<name> is matched against the instance attributes…
+•Python 先看这个对象（实例）有没有这个属性。
+•如果找到了（例如 balance 是通过 self.balance 赋的），就直接返回。
+🟡 第三步（如果实例没有）：If not, <name> is looked up in the class…
+•如果这个名字不是实例的属性，Python 会去这个对象的类（class）中找。
+•例如 interest 是类属性，不属于某个具体对象。
+🔵 第四步：That value is returned unless it is a function…
+•如果找到的属性是个普通值（比如数字），就直接返回。
+•如果是一个函数（方法），Python 会自动把当前对象作为 self 绑定进去，变成一个“绑定方法”（bound method）。
+
+# getattr 内置函数（获取属性）
+🔹 主旨：Python 提供了多种方式来访问对象的属性：
+最常见的是通过 点表达式：
+tom_account.balance 
+也可以使用内置函数 getattr：
+getattr(tom_account, 'balance')
+
+```python
+>>> hasattr(tom_account, 'deposit')
+True
+```
+hasattr 用来判断某个属性是否存在于对象中。这里检查 tom_account 是否有 deposit 这个方法（存在于类中）。
+
+🔍 总结要点：
+	•	getattr(obj, 'name') 和 obj.name 是等价的；
+	•	Python 查找属性的方式是一样的：
+	1.	先查实例属性
+	2.	找不到再查类属性
+	•	getattr 和 hasattr 提供了更灵活的方式来动态查找属性；
+	•	可能返回的是：
+	•	实例的属性，或者
+	•	类的属性（包括方法）
+
+# Attribute Assignment 属性赋值语句
+## 🟦 Assignment to Attributes（属性赋值）
+
+📌 核心概念：
+当你使用点表达式（例如 a.x = value）来进行赋值时，赋值操作修改的是点表达式对象本身的属性，而不是去查找类的定义！
+
+🔹 有两种情况：
+	1.	对象是实例（Instance）
+	•	比如：tom_account.interest = 0.08
+	•	会在 tom_account 实例中新增或覆盖一个名为 interest 的 实例属性。
+	•	它 不会 修改 Account 类中原本的 interest 属性！
+    2.	对象是类（Class）
+	•	比如：Account.interest = 0.04
+	•	会直接修改类属性（class attribute）——这个修改会影响到所有没有被实例属性遮蔽的实例。
+
+🧠 重点解释：
+	•	tom_account.interest = 0.08 并不会“查找”原来类中有没有这个 interest 属性，而是直接在实例 tom_account 中创建一个新的属性叫 interest。
+	•	所以这时候，tom_account.interest 优先访问的是 实例属性，会遮蔽掉类中原本的那个 interest = 0.02。
+
+
