@@ -113,3 +113,69 @@ hasattr 用来判断某个属性是否存在于对象中。这里检查 tom_acco
 	•	所以这时候，tom_account.interest 优先访问的是 实例属性，会遮蔽掉类中原本的那个 interest = 0.02。
 
 
+# map函数的用法
+map() 是 Python 的一个内置函数，用于将一个函数应用到一个可迭代对象（如列表、元组、range）中的每个元素上，并返回一个新的迭代器。
+```python
+map(function, iterable)
+```
+•function：你想应用的函数（可以是内置函数、自定义函数，或对象的方法）
+•iterable：可迭代对象，如列表、元组、range 等
+## 为什么map可以用next调用？
+因为 map() 返回的是一个 迭代器（iterator），而 next() 函数正是用来从迭代器中取下一个值的。
+🔁 什么是迭代器？
+在 Python 中，迭代器是一种可以逐个返回元素的对象。每次调用 next()，就会返回一个“下一个”值。
+
+一步一步“惰性地”进行，不会一次性把所有结果都算出来。这种特性叫做：惰性求值（lazy evaluation）
+
+# 🧠 Terminology 专业术语: Attributes, Functions, and Methods
+
+## ✅ 1. Python 中的对象属性（Attributes）
+
+- 所有对象都有属性，属性是 **name-value 对（键值对）**
+- 类（Class）是一类对象的**类型**或**分类**
+- 类本身也是对象，因此类也可以拥有属性
+
+### 🟡 属性类型分为：
+| 属性类型           | 含义                                   |
+|--------------------|--------------------------------------|
+| Instance Attribute | 实例属性，属于具体对象的属性             |
+| Class Attribute    | 类属性，属于类本身的属性，所有对象共享    |
+
+---
+
+## ✅ 2. Python 对象系统（Object System）
+
+- **函数也是对象（Functions are objects）**
+
+- **绑定方法（Bound Methods）也是对象：**
+  - 本质上是函数，但第一个参数 `self` 已经自动绑定到了某个实例上
+  - 示例：`a.deposit` 是 `deposit(self, amount)` 的绑定版本，`self` 自动是 `a`
+
+- **点表达式（Dot expressions）**
+  - 点表达式会返回绑定方法（bound method），如果类属性是函数
+  - 示例：  
+    ```python
+    <instance>.<method_name>
+    # 等价于：method(self=instance, ...)
+    ```
+
+---
+
+## 🧩 3. 术语总结图示（Venn Diagram）
+
+一个方法（Method）本质是：
+
+- 类属性的一种（属于类）
+- 同时也是函数（可以被调用）
+- 所以它既是**Class Attribute**，又是**Function**
+
+```text
+Terminology:
+   ┌─────────────────────┐
+   │  Class Attributes    │
+   │     ┌────────────┐   │
+   │     │  Methods   │◄───── 类属性中是函数的就是方法
+   │     └────────────┘   │
+   └─────────────────────┘        Functions
+            ▲
+            └── 既属于类属性，也是函数

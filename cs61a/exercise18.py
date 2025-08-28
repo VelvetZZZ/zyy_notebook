@@ -39,3 +39,65 @@ if __name__ == "__main__":
 #By assigning to the class,you don't erase all the special cases!
 
 #Method Calls 方法调用
+
+class Account:
+    """An account has a balance and a holder.
+    All accounts share a common interest rate.
+    >>> a = Account('John')
+    >>> a.holder
+    'John'
+    >>> a.deposit(100)
+    100
+    >>> a.withdraw(90)
+    'Insufficient funds'
+    >>> a.balance
+    10
+    """
+    def __init__(self, account_holder):
+        self.holder = account_holder
+        self.balance = 0
+
+    def deposit(self, amount):
+        """Add amount to balance."""
+        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        """Subtract amount from balance if funds avaliable."""
+        if amount > self.balance:
+            return 'Insufficient funds'
+        self.balance = self.balance - amount
+        return self.balance
+a = Account('Alan')
+print(a.deposit(5))
+print(a.deposit(5))
+print(a.deposit)
+
+b = Account('Ada')
+print(b.balance)
+print(a.balance)
+
+f = a.deposit
+print(f(10))
+print(f(10))
+
+m = map(a.deposit, range(10, 20))#将 range(10, 20) 中的每个数依次作为 amount 传入 a.deposit(amount) 中。
+print(a.balance)#map函数的用法见md
+print(next(m))
+print(next(m))
+
+#Bound Methods
+class Account:
+    def __init__(self):
+        self.balance = 0
+
+    def deposit(self, amount):
+        self.balance += amount
+        print(f"Depositing {amount} to", self)
+        return self.balance
+f = a.deposit  # 👈 这是一个 bound method
+a = Account()
+print(type(Account.deposit))
+print(type(a.deposit))  # 而不是 tom_account.deposit
+print(Account.deposit(a, 1001))
+print(a.deposit(1007))
