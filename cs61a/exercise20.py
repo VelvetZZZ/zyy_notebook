@@ -8,3 +8,12 @@ print(repr(half))
 print(str(half))
 print(half)
 print(type(str(half)))  # 输出：<class 'str'>
+print(eval(repr(half)))
+print(eval(str(half)))# 输出：浮点数 0.5
+
+
+s = "Hello World"
+print(s)
+print(str(s))
+print(repr(s))
+repr(s)#"'Hello, World'"

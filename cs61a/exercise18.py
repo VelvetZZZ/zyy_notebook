@@ -101,3 +101,4 @@ print(type(Account.deposit))
 print(type(a.deposit))  # 而不是 tom_account.deposit
 print(Account.deposit(a, 1001))
 print(a.deposit(1007))
+
