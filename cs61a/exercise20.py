@@ -26,7 +26,7 @@ from math import pi
 
 print('pi starts with' + str(pi) + '...')
 
-#Using sting interpolation(字符串插值)
+#Using string interpolation(字符串插值)
 f'pi starts with {pi}...'
 print(f'pi starts with {pi}...')
 
@@ -41,4 +41,6 @@ abs = float
 print(f'2 + 2 = {abs(2 + 2)}')
 print(f'2 + 2 = {(lambda x: x + x)(2)}')
 
-
+#在 f-string 中，每个花括号 {} 中的表达式会被单独求值，并且可能会产生副作用（side effect），从而影响后续的表达式。
+s = [9, 8, 7]
+print(f'because{s.pop() } {s.pop()} {str}.')
