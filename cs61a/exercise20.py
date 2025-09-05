@@ -46,9 +46,11 @@ s = [9, 8, 7]
 print(f'because{s.pop() } {s.pop()} {str}.')
 
 #Polymorphic Functions 多态函数
-str(obj)  # obj.__str__()
-repr(obj) # obj.__repr__()
+"""
+>>> str(obj)  # obj.__str__()
+>>> repr(obj) # obj.__repr__()
 
+"""
 """
 >>> from fractions import Fraction
 >>> half = Fraction(1, 2)
@@ -65,3 +67,51 @@ repr(obj) # obj.__repr__()
 >>> half.__str__()
 '1/2'
 """
+
+
+
+
+#Interfaces 接口
+class Ratio:
+    def __init__(self, n, d):
+        self.number = n
+        self.denom = d
+
+    def __repr__(self):
+        return 'Ratio({0}, {1})'.format(self.number, self.denom)
+
+    def __str__(self):
+        return '{0}/{1}'.format(self.number, self.denom)
+
+    def __add__(self, other):
+        if isinstance(other, int):
+            n = self.number + self.denom * other
+            d = self.denom
+        elif isinstance(other, Ratio):
+            n = self.number * other.denom + self.denom * other.number
+            d = self.denom * other.denom
+        elif isinstance(other, float):
+            return float(self) + other
+        g = gcd(n, d)
+        return Ratio(n // g, d // g)
+
+    __radd__ = __add__
+
+    def __float__(self):
+        return self.number / self.denom
+
+
+def gcd(n, d):
+    while n != d:
+        n, d = min(n, d), abs(n - d)
+    return n
+
+#Special Method Names
+
+zero, one, two = 0, 1, 2
+print(one + two)
+print(bool(zero), bool(one))
+
+zero, one, two = 0, 1, 2
+print(one.__add__(two))
+print(zero.__bool__(), one.__bool__())#上下等价
