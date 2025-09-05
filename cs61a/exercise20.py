@@ -44,3 +44,24 @@ print(f'2 + 2 = {(lambda x: x + x)(2)}')
 #在 f-string 中，每个花括号 {} 中的表达式会被单独求值，并且可能会产生副作用（side effect），从而影响后续的表达式。
 s = [9, 8, 7]
 print(f'because{s.pop() } {s.pop()} {str}.')
+
+#Polymorphic Functions 多态函数
+str(obj)  # obj.__str__()
+repr(obj) # obj.__repr__()
+
+"""
+>>> from fractions import Fraction
+>>> half = Fraction(1, 2)
+
+>>> repr(half)
+'Fraction(1, 2)'     # 这是 __repr__ 的结果
+
+>>> str(half)
+'1/2'                # 这是 __str__ 的结果
+
+>>> half.__repr__()
+'Fraction(1, 2)'
+
+>>> half.__str__()
+'1/2'
+"""
