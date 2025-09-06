@@ -133,3 +133,24 @@ print(str(t))  # 输出 <1 9 25>
 
 #Linked Lists Mutation(改变)
 
+#Example：Adding to a Set Represented as an Ordered List
+def add(s, v):
+    assert s is not List.empty
+
+    if s.first > v:
+        s.first, s.rest = v, Link(s.first, s.rest)
+    elif s.first < v and empty(s.rest):
+        s.rest = Link(v)
+    elif s.first < v:
+        add(s.rest, v)
+    return s
+
+
+
+def remove(s, v):
+    """Remove value v from ordered linked list s, return modified s."""
+    assert s is not Link.empty
+
+    # 你来补充代码 🧠✨
+
+#Tree Class

@@ -118,3 +118,8 @@ t = s.rest                     # t 指向第二个节点（值为 2 的节点）
 t.rest = s                     # 让 t 的 rest 指回 s（产生循环）
 s.first                       # 输出 s 的 first 值
 ```
+# 图示结构（简略）：
+
+s ─┐
+   ↓
+  [5] → t → [2] → s (again) → ...
