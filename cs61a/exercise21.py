@@ -135,14 +135,14 @@ print(str(t))  # 输出 <1 9 25>
 
 #Example：Adding to a Set Represented as an Ordered List
 def add(s, v):
-    assert s is not List.empty
+    assert s is not Link.empty
 
     if s.first > v:
         s.first, s.rest = v, Link(s.first, s.rest)
-    elif s.first < v and empty(s.rest):
+    elif s.first < v and s.rest is Link.empty:
         s.rest = Link(v)
     elif s.first < v:
-        add(s.rest, v)
+        s.rest = add(s.rest, v)
     return s
 
 
@@ -151,6 +151,14 @@ def remove(s, v):
     """Remove value v from ordered linked list s, return modified s."""
     assert s is not Link.empty
 
-    # 你来补充代码 🧠✨
+    if s.first == v :
+        return s.rest
+    elif s.first < v and s.rest is Link.empty:
+        s.rest = Link(s)
+    elif s.first < v:
+        s.rest = remove(s.rest, v)  # ✅ 要更新链表结构
+    else:
+        return s
+
 
 #Tree Class
