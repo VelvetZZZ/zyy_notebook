@@ -81,3 +81,40 @@ isinstance("hello", str)    # True
 isinstance([], list)        # True
 isinstance({}, list)        # False
 ```
+
+# 🧠 `map()` 函数学习笔记
+
+---
+
+## 🤔 为什么学习 `map()` 很重要？
+
+- 它是 Python 中处理**批量数据转换**的常用工具；
+- 避免使用繁琐的 for 循环，使代码更加 **简洁、函数式、可读性强**；
+- 搭配 `lambda` 表达式使用，威力更大 💥！
+
+---
+
+## 🧬 函数定义与语法
+
+> `map()` 会将传入的函数依次作用到给定序列的每个元素上，并返回一个新的可迭代对象。
+
+### 📌 语法：
+
+```python
+map(function, iterable)
+```
+
+
+# 🧠 `Link` 链表中的循环引用示例
+
+---
+
+## 🤔 代码行为解读：为什么 `s.first` 输出是 `5`？
+
+```python
+s = Link(1, Link(2, Link(3)))  # 创建链表：1 → 2 → 3
+s.first = 5                    # 把第一个值改成 5
+t = s.rest                     # t 指向第二个节点（值为 2 的节点）
+t.rest = s                     # 让 t 的 rest 指回 s（产生循环）
+s.first                       # 输出 s 的 first 值
+```
