@@ -162,3 +162,19 @@ def remove(s, v):
 
 
 #Tree Class
+#Pruning Trees（修剪树）
+def prune(t, n):
+    """Prune all sub-trees whose label is n."""
+    t.branches = [b for b in t.branches if b.label != n]#过滤子树
+    """这一步是先去掉当前节点的所有子树中 label == n 的⬆️
+    这句代码用的是 列表推导式(list comprehension)，它的作用是：
+	•	遍历所有 t.branches 中的分支 b
+	•	只保留那些 b.label != n 的分支
+    """
+    def prune(t, n):
+        """ 
+    Prune all sub-trees whose label is n."""
+    t.branches = [b for b in t.branches if b.label != n]
+    for b in t.branches:
+        prune(b, n)#递归修剪剩下的子树
+
