@@ -61,3 +61,6 @@ fib = memo(fib)     # 先加缓存（返回一个新的函数）
 fib = count(fib)    # 再包装这个函数，加上 call_count 属性
 print(fib(30))
 print(fib.call_count)
+
+
+#Exponentiation 乘方
