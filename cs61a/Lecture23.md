@@ -67,3 +67,61 @@ def square(x):
 •	利用数学性质将指数减半
 •	时间复杂度：O(log n)
 •	适合大指数幂运算
+
+
+# 🔢 Order of Growth Notation（增长阶表示法）
+
+---
+
+## 📚 什么是 Order of Growth？
+
+- 用于描述**算法效率随输入规模增长的趋势**
+- 常用两种记法：
+  - **Θ（Theta）**：准确增长率（tight bound）
+  - **O（Big-O）**：上界（最坏情况）
+
+---
+
+## 🎯 判断效率的常见复杂度阶
+
+| 增长类型              | 数学表示     | 举例函数      | 说明                         |
+|-----------------------|--------------|---------------|------------------------------|
+| 🟢 Constant            | Θ(1) / O(1)  | 字典查找      | 不随输入变化                 |
+| 🔵 Logarithmic         | Θ(log n)     | `exp_fast`    | 每次操作减半，增长慢         |
+| 🟡 Linear              | Θ(n)         | `exp`         | 输入变大，时间成比例增加     |
+| 🟠 Quadratic           | Θ(n²)        | `overlap`     | 两层嵌套循环，增长更快       |
+| 🔴 Exponential         | Θ(2ⁿ)        | `fib` 原始递归 | 每多一项调用，翻倍递归       |
+
+---
+
+## 🧠 例子解析
+
+###  🔴 指数增长（Exponential Growth）
+
+```python
+def fib(n):
+    if n == 0 or n == 1:
+        return n
+    return fib(n-1) + fib(n-2)
+```
+•	每个 fib(n) 会递归调用 fib(n-1) 和 fib(n-2)
+•	会造成大量重复计算
+•	时间复杂度：Θ(2ⁿ)
+
+### 🟢 对数增长（Logarithmic Growth）
+
+```python
+def exp_fast(b, n):
+    if n == 0:
+        return 1
+    elif n % 2 == 0:
+        return square(exp_fast(b, n // 2))
+    else:
+        return b * exp_fast(b, n - 1)
+
+def square(x):
+    return x * x
+```
+•	如果是偶数指数：只需递归一半 n//2
+•	减少了大量重复乘法
+•	时间复杂度：Θ(log n)

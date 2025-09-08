@@ -83,3 +83,5 @@ def exp_fast(b, n):
 def square(x):
     return x * x  #快速幂（Exponentiation by Squaring）
 
+
+#Order of Growth Notation 算法的时间复杂度表示法
