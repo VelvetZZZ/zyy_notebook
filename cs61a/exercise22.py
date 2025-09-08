@@ -64,3 +64,9 @@ print(fib.call_count)
 
 
 #Exponentiation 乘方
+
+def exp(b, n):
+    if n == 0:
+        return 1
+    else:
+        return b * exp(b, n-1)
