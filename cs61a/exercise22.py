@@ -63,10 +63,23 @@ print(fib(30))
 print(fib.call_count)
 
 
-#Exponentiation 乘方
-
+#Exponentiation 指数运算
+#求底数b的n次幂
+#方法一：
 def exp(b, n):
     if n == 0:
         return 1
     else:
-        return b * exp(b, n-1)
+        return b * exp(b, n-1)#普通递归幂（Linear Recursion)
+    
+ #方法二：
+def exp_fast(b, n):
+    if n == 0:
+        return 1
+    elif n % 2 == 0:
+        return square(exp_fast(b, n // 2))
+    else:
+        return b * exp_fast(b, n-1)
+def square(x):
+    return x * x  #快速幂（Exponentiation by Squaring）
+
