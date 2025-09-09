@@ -85,3 +85,6 @@ def square(x):
 
 
 #Order of Growth Notation 算法的时间复杂度表示法
+
+#Quadratic Time（二次时间复杂度）
+#Space
