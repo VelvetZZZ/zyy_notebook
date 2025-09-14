@@ -32,3 +32,5 @@ Restaurant('Top Dog', 5)
 results = search('Thai')
 for r in results:
     print(r, 'is similar to', r.similar(3))
+
+#Example:Similar Restaurants
