@@ -68,11 +68,14 @@ print(r1.similar(2, similarity))
 
 #设计一个 Restaurant 类，并通过比较评价者（reviewers）来判断两家餐厅的相似性，找出与某家餐厅最相似的 K 家餐厅。
 
-#🧮 相似度函数定义
+import json
+
+# 相似度函数：返回两个餐厅共享评论者的数量
 def reviewed_both(r1, r2):
     return len(set(r1.reviewers) & set(r2.reviewers))
 
-#🧱 类定义部分
+
+# 餐厅类定义
 class Restaurant:
     all = []
 
@@ -82,23 +85,20 @@ class Restaurant:
         self.reviewers = reviewers
         Restaurant.all.append(self)
 
+    def __repr__(self):
+        return '<' + self.name + '>'
+
     def similar(self, k, similarity=reviewed_both):
         """Return the K most similar restaurants to SELF."""
-        others = Restaurant.all
+        others = list(Restaurant.all)
         others.remove(self)
         different = lambda r: -similarity(r, self)
         return sorted(others, key=different)[:k]
 
-    def __repr__(self):
-        return '<' + self.name + '>'
-    
-#🔁 数据读取部分
-import json
 
+# 读取评论数据：reviewsE23.json
 reviewers_for_restaurant = {}
-
-# 读取 reviews.json
-for line in open('reviewsE23.json'):
+for line in open('cs61a/reviewsE23.json'):
     r = json.loads(line)
     biz = r['business_id']
     if biz not in reviewers_for_restaurant:
@@ -106,15 +106,38 @@ for line in open('reviewsE23.json'):
     else:
         reviewers_for_restaurant[biz].append(r['user_id'])
 
-# 读取 restaurants.json 并创建 Restaurant 对象
-for line in open('restaurantsE23.json'):
+# 读取餐厅数据并创建 Restaurant 实例
+for line in open('cs61a/restaurantsE23.json'):
     r = json.loads(line)
     reviewers = reviewers_for_restaurant[r['business_id']]
     Restaurant(r['name'], r['stars'], reviewers)
 
 
-#🔍 餐厅搜索与打印
-results = search('Thai')
+# 搜索餐厅名字中包含 'Thai' 的
+def search(name):
+    return [r for r in Restaurant.all if name in r.name]
 
+
+# 执行搜索 + 输出结果
+results = search('Thai')
 for r in results:
-    print(r.name, 'shares reviewers with', r1.similar(3))
+    print(r.name, 'shares reviewers with', r.similar(3))
+
+
+#Linear-Time Intersection of Sorted Lists 有序列表的线性时间交集算法
+
+def fast_overlap(s, t):
+    """Return the overlap between sorted S and sorted T."""
+
+    i, j, count = 0, 0, 0
+
+    while i < len(s) and j < len(t):
+        if s[i] == t[j]:
+            count += 1
+            i += 1
+            j += 1
+        elif s[i] < t[j]:
+            i += 1
+        else:
+            j +=1
+    return count
