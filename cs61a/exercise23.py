@@ -98,7 +98,7 @@ import json
 reviewers_for_restaurant = {}
 
 # 读取 reviews.json
-for line in open('reviews.json'):
+for line in open('reviewsE23.json'):
     r = json.loads(line)
     biz = r['business_id']
     if biz not in reviewers_for_restaurant:
@@ -107,7 +107,7 @@ for line in open('reviews.json'):
         reviewers_for_restaurant[biz].append(r['user_id'])
 
 # 读取 restaurants.json 并创建 Restaurant 对象
-for line in open('restaurants.json'):
+for line in open('restaurantsE23.json'):
     r = json.loads(line)
     reviewers = reviewers_for_restaurant[r['business_id']]
     Restaurant(r['name'], r['stars'], reviewers)
