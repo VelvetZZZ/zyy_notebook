@@ -76,3 +76,9 @@ t = [
 	•	append(x) 是将 x 作为一个整体添加到列表末尾。
 	•	list[a:b] 返回的是新的列表，不是原始元素。
 	•	对列表的引用和嵌套，要注意每一层结构。
+
+
+# 属性查找顺序
+
+## Instance attributes are found before class attributes; class attributes are inherited.
+（实例属性优先于类属性；类属性是可以继承的。）
