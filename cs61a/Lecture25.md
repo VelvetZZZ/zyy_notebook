@@ -78,7 +78,59 @@ t = [
 	•	对列表的引用和嵌套，要注意每一层结构。
 
 
-# 属性查找顺序
+# 🧠 CS61A 学习笔记：Land Owners —— 类属性 vs 实例属性
 
-## Instance attributes are found before class attributes; class attributes are inherited.
-（实例属性优先于类属性；类属性是可以继承的。）
+## 📌 核心概念
+
+- **类属性（Class Attribute）**：属于类本身，所有实例共享。
+- **实例属性（Instance Attribute）**：属于对象（实例）自身，优先级高于类属性。
+- **继承（Inheritance）**：子类会继承父类的属性和方法，若有相同名称的属性，则覆盖。
+
+---
+
+## 👨‍🏫 示例代码分析
+
+```python
+class Worker:
+    greeting = 'Sir'
+    def __init__(self):
+        self.elf = Worker
+    def work(self):
+        return self.greeting + ', I work'
+    def __repr__(self):
+        return Bourgeoisie.greeting
+
+class Bourgeoisie(Worker):
+    greeting = 'Peon'
+    def work(self):
+        print(Worker.work(self))
+        return 'I gather wealth'
+
+jack = Worker()
+john = Bourgeoisie()
+jack.greeting = 'Maam'
+```
+ ## 🔍 属性查找规则
+	•	jack.greeting → 优先查找实例属性 → jack.greeting = 'Maam' → ✅ 'Maam'
+	•	john.greeting → 实例没有 greeting，查找类属性 → Bourgeoisie.greeting = 'Peon' → ✅ 'Peon'
+
+ ## 📦 方法行为解析
+ ```python
+ print(john.work())
+ ```
+ 	•	john.work() 调用的是 Bourgeoisie 重写的 work 方法。
+	•	print(Worker.work(self)) 会调用父类 work 方法：
+	•	self.greeting 是 john 实例查找 → Bourgeoisie.greeting → 'Peon'
+	•	返回 'Peon, I work'
+	•	然后返回 'I gather wealth'
+🧾 输出如下：
+```text
+Peon, I work
+I gather wealth
+```
+
+## 🧠 额外说明
+
+__repr__ 方法
+	•	repr(jack) 会返回 Bourgeoisie.greeting，即 'Peon'。
+	•	即使 jack 是 Worker 的实例，__repr__ 中显式引用了子类 Bourgeoisie.greeting。
