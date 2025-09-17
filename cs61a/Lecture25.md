@@ -132,5 +132,5 @@ I gather wealth
 ## 🧠 额外说明
 
 __repr__ 方法
-	•	repr(jack) 会返回 Bourgeoisie.greeting，即 'Peon'。
-	•	即使 jack 是 Worker 的实例，__repr__ 中显式引用了子类 Bourgeoisie.greeting。
+•	repr(jack) 会返回 Bourgeoisie.greeting，即 'Peon'。
+•	即使 jack 是 Worker 的实例，__repr__ 中显式引用了子类 Bourgeoisie.greeting。
