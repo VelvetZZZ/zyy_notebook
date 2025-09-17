@@ -39,6 +39,7 @@ john = Bourgeoisie()
 jack.greeting = 'Maam'
 
 # Examples:Iterables & Iterators
+
 def min_abs_indices(s):
     """
     Indices of all elements in list s that have the smallest absolute value.
@@ -50,3 +51,18 @@ def min_abs_indices(s):
     """
     min_abs = min(abs(x) for x in s)
     return [i for i in range(len(s)) if abs(s[i]) == min_abs]
+s = [-4, -3, -2, 3, 2, 4]
+print(min_abs_indices(s))
+"""等价于
+def min_abs_indices(s):
+    min_abs = min(map(abs, s))
+    def f(i):
+        return abs(s[i]) == min_abs
+    return list(filter(f, range(len(s))))"""
+
+
+
+def largest_adj_sum(s):
+    """Largest sum of two adjacent elements in a list s."""
+    return max([s[i] + s[i+1] for i in range(len(s) - 1)])
+"""等价于max([a + b for a, b in zip(s[:-1], s[1:])])"""
