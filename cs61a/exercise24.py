@@ -140,3 +140,36 @@ def ordered(s, key=lambda x: x):
     else:
         return ordered(s.rest, key)#当前两项没问题，继续检查 s.rest 是否有序
 print(ordered(Link(1, Link(3, Link(4)))))
+
+
+#题目：合并两个已经排序的 Link 链表 s 和 t，返回一个新的链表，其中元素仍然保持升序排列。
+
+def merge(s, t):
+    """Return a sorted Link with the elements of sorted s & t."""
+    
+    if s is Link.empty:
+        return t
+    elif t is Link.empty:
+        return s
+    elif s.first <= t.first:
+        # s的当前元素更小，把它作为当前节点
+        return Link(s.first, merge(s.rest, t))
+    else:
+        # t的当前元素更小，把它作为当前节点
+        return Link(t.first, merge(s, t.rest))
+    
+ #新题目： 合并两个已排序链表 s 和 t，直接在原链表上操作，不创建新的 Link 对象。
+
+def merge_in_place(s, t):
+    """Return a sorted Link with the elements of sorted s & t."""
+    
+    if s is Link.empty:
+        return t
+    elif t is Link.empty:
+        return s
+    elif s.first <= t.first:
+        s.rest = merge_in_place(s.rest, t)
+        return s
+    else:
+        t.rest = merge_in_place(s, t.rest)
+        return t
