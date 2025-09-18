@@ -66,3 +66,27 @@ def largest_adj_sum(s):
     """Largest sum of two adjacent elements in a list s."""
     return max([s[i] + s[i+1] for i in range(len(s) - 1)])
 """等价于max([a + b for a, b in zip(s[:-1], s[1:])])"""
+
+
+def digit_dict(s):
+    """Map each digit d to the lists of elements in s that end with d."""
+    return {
+        d: [x for x in s if x % 10 == d]
+        for d in range(10)
+        if any(x % 10 == d for x in s)
+    }
+s = [5, 8, 13, 21, 34, 55, 89]
+print(digit_dict(s))
+
+# 方法 2：先提取所有出现过的个位数（更高效）
+def digit_dict(s):
+    last_digits = [x % 10 for x in s]
+    return {
+        d: [x for x in s if x % 10 == d]
+        for d in range(10)
+        if d in last_digits
+    }
+
+# 示例测试
+s = [5, 8, 13, 21, 34, 55, 89]
+print(digit_dict(s))
