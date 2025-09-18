@@ -90,3 +90,12 @@ def digit_dict(s):
 # 示例测试
 s = [5, 8, 13, 21, 34, 55, 89]
 print(digit_dict(s))
+
+
+def all_have_an_equal(s):
+    """Does every element equal some other element in s?"""
+    return min([s.count(x) for x in s]) > 1
+
+#方法2:使用列表切片
+def all_have_an_equal(s):
+    return all([s[i] in s[:i] + s[i+1:] for i in range(len(s))])
