@@ -99,3 +99,44 @@ def all_have_an_equal(s):
 #方法2:使用列表切片
 def all_have_an_equal(s):
     return all([s[i] in s[:i] + s[i+1:] for i in range(len(s))])
+
+
+
+#Example: Linkes List
+
+#📌 题目：判断一个链表是否是有序的
+class Link:
+    """A linked list."""
+
+    empty = ()
+
+    def __init__(self, first, rest=empty):
+        self.first = first
+        self.rest = rest
+
+    def __repr__(self):
+        if self.rest is not Link.empty:
+            rest_str = ', ' + repr(self.rest)
+        else:
+            rest_str = ''
+        return f'Link({self.first}{rest_str})'
+    
+def ordered(s, key=lambda x: x):
+    """Is Link s ordered?
+
+    >>> ordered(Link(1, Link(3, Link(4))))
+    True
+    >>> ordered(Link(1, Link(4, Link(3))))
+    False
+    >>> ordered(Link(1, Link(-3, Link(4))))
+    False
+    >>> ordered(Link(1, Link(-3, Link(4))), key=abs)
+    True
+    """
+    if s is Link.empty or s.rest is Link.empty:#链表为空，或者只剩最后一个元素，都是升序的 ⇒ 返回 True。
+        return True
+    elif key(s.first) > key(s.rest.first):#	当前值如果 大于 下一个值（按 key 比较），说明不是升序 ⇒ 返回 False。
+        return False
+    else:
+        return ordered(s.rest, key)#当前两项没问题，继续检查 s.rest 是否有序
+print(ordered(Link(1, Link(3, Link(4)))))
