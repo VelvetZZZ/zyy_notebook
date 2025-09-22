@@ -1,1 +1,71 @@
+# 📘 Scheme Fundamentals 学习笔记
 
+> 来源：伯克利 CS61A 《Structure and Interpretation of Computer Programs》
+
+---
+
+## 🧠 一、表达式（Expressions）
+
+Scheme 程序是由一系列表达式组成的，表达式可以分为两类：
+
+### 1. 🧩 原始表达式（Primitive Expressions）
+
+最基本的值或运算符：
+
+- 数字：`2`, `3.3`
+- 布尔值：`true`, `false`
+- 运算符：`+`, `-`, `quotient`, `not` ...
+
+### 2. 🧱 组合表达式（Combinations）
+
+用括号包住操作符和参数，表示函数调用：
+
+- `(quotient 10 2)` → 返回 `5`
+- `(not true)` → 返回 `false`
+
+---
+
+## 🔁 二、语义规则（Evaluation Rules）
+
+### ✔️ 数字是自求值的（Self-evaluating）
+
+```scheme
+> 2
+2
+```
+### ✔️ 符号是变量名（Symbols）
+
+如 quotient 表示 Scheme 的整数除法函数。
+
+## 🧩 三、函数调用表达式（Call Expressions）
+格式如下：
+```scheme
+(<operator> <operand1> <operand2> ...)
+```
+•操作符：函数名，例如 +, *, quotient
+•操作数：可以是数字、符号、嵌套的表达式
+
+## 🧪 四、示例讲解（Examples）
+- 示例 1： 
+ (quotient 10 2) ; → 5
+
+调用 quotient，将 10 整除以 2，结果为 5。
+
+- 示例 2（嵌套调用）：
+ (quotient (+ 8 7) 5) ; → 3 
+1.	(+ 8 7) → 15
+2.	quotient(15, 5) → 3
+
+- 示例 3（多重嵌套）：
+步骤分析：
+1.	(+ 2 4) → 6
+2.	(* 3 6) → 18
+3.	(+ 3 5) → 8
+4.	(- 10 7) → 3
+5.	(+ 18 8 3 6) → 35 
+
+## 📌 五、语法提示（Syntax Notes）
+✅ 表达式使用 前缀记法（operator 写在前）
+✅ 使用圆括号表示函数调用（不能省略）
+✅ 表达式可以 跨行 书写，空格与换行 不影响求值
+❌ 不要漏括号，括号必须匹配完整！
