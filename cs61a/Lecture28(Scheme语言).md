@@ -321,7 +321,7 @@ define 的核心作用是给任何值绑定一个名字。
 	•	执行的是表达式：(+ 1 2 (square 3))，即 (+ 1 2 9)，结果为 12
 
   
-# Scheme 学习笔记：cond 与 begin 特殊形式
+# cond 与 begin 特殊形式
 
 1. cond：条件判断语句（类似 Python 的 if-elif-else）
 
@@ -389,3 +389,36 @@ Scheme 等价写法（if + begin）：
 ```
 总结：
 ![alt text](image-2.png)
+
+# Let 表达式（Let Expressions）
+
+1. let 是什么？
+•	let 是 Scheme 中用于临时绑定变量值的一种特殊形式。
+•	通常用于只在一个表达式中需要某些中间变量时。
+•	这些变量只在 let 内部有效，作用域不会扩散。
+
+2. 对应 Python 的等效代码对比
+3. 
+🐍 Python 写法：
+```python
+a = 3
+b = 2 + 2
+c = math.sqrt(a * a + b * b)
+# a 和 b 在下面依然有效
+```
+## 🧠 Scheme 写法：
+```scheme
+(define c
+  (let ((a 3)
+        (b (+ 2 2)))
+    (sqrt (+ (* a a) (* b b)))))
+```
+
+## 🔍 区别说明：
+	•	在 Python 中：变量 a 和 b 定义后作用域是整个作用块
+	•	在 Scheme 的 let 表达式中：a 和 b 只在 let 内部临时存在
+	•	let 表达式运行完后，这些绑定变量就不再可用
+
+## 💡 总结：
+	•	用 let 可以简洁地管理作用域，避免变量污染全局环境
+	•	是函数式编程中常用的局部变量绑定方式
