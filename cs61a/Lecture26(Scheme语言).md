@@ -69,3 +69,29 @@ Scheme 程序是由一系列表达式组成的，表达式可以分为两类：
 ✅ 使用圆括号表示函数调用（不能省略）
 ✅ 表达式可以 跨行 书写，空格与换行 不影响求值
 ❌ 不要漏括号，括号必须匹配完整！
+
+
+# 🧠 Scheme Special Forms 学习笔记
+
+## 🌟 什么是 Special Form（特殊形式）？
+
+> 在 Scheme 中，**不是函数调用的表达式就是特殊形式**（special form）。
+
+特殊形式不会一开始就对所有参数求值，而是根据语法规则选择性地求值。例如 `if` 只会求值其中一个分支。
+
+---
+
+## ✅ 常见的 Special Forms
+
+### 1. `if` 表达式（条件判断）
+
+```scheme
+(if <predicate> <consequent> <alternative>)
+```
+语义解释：
+•	先判断 <predicate> 条件是否为真
+•	如果为真，返回 <consequent>
+•   否则，返回 <alternative>
+📌 只会执行其中一个分支！
+例子：
+(if (< 3 5) 1 2)   ; 返回 1
