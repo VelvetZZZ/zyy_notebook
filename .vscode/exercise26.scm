@@ -1,2 +1,3 @@
 ;Scheme Lists
-(cons 1 (cons 2 nil))
+(display (cons 1 (cons 2 '())))
+(newline)
