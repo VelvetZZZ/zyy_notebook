@@ -106,4 +106,38 @@ nil 在 MIT Scheme 里不是定义好的变量，
 
 
 
+; ==========================================================
+; even-odd-subsets.scm
+; Non-empty subsets of integer list s that have even/odd sum
+  改进版
+; ==========================================================
+
+(define (even-subsets s)
+  (if (null? s)
+      nil
+      (append (even-subsets (cdr s))
+              (subset-helper even? s))))
+
+(define (odd-subsets s)
+  (if (null? s)
+      nil
+      (append (odd-subsets (cdr s))
+              (subset-helper odd? s))))
+
+(define (subset-helper f s)
+  (append
+    (map (lambda (t) (cons (car s) t))
+         (if (f (car s))
+             (even-subsets (cdr s))
+             (odd-subsets (cdr s))))
+    (if (f (car s))
+        (list (list (car s)))
+        nil)))
+
+; ======= Test ========
+(display (even-subsets '(3 4 5 7 8))) (newline)
+(display (odd-subsets '(3 4 5 7 8)))  (newline)
+
+
+
 
