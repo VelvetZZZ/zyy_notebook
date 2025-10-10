@@ -196,3 +196,202 @@ cons
 - **列表** 只是由特殊形态的 pair 构成的链表。  
 - 若任何 `cdr` 不是 `nil` 或列表，结构就断裂为“嵌套 pair”。  
 - 理解 `cons` 的语义，就能理解 Scheme 的一切复杂数据结构。
+
+
+
+# 🧭 CS61A Scheme 学习笔记
+
+> **课程背景**：  
+> 本笔记基于 UC Berkeley 的 CS61A 课程（Structure and Interpretation of Computer Programs），  
+> 使用的语言是 **Scheme**（Lisp 的一个方言）。
+
+---
+
+## 🧠 一、Scheme 与 Lisp 的关系
+
+| 语言 | 诞生时间 | 特点 | 应用 |
+|------|-----------|------|------|
+| **Lisp** | 1958（John McCarthy） | 最早的函数式语言之一，强调“代码即数据” | AI、编译器、抽象计算 |
+| **Scheme** | 1975（Sussman & Steele） | Lisp 的简化版，语法更干净，逻辑统一，支持词法作用域 | 教学与研究（MIT, Berkeley） |
+| **Common Lisp** | 1980s | 工程化更强，语法更复杂 | 工业界、AI 项目 |
+
+📘 **一句话总结**：
+> Scheme 是 Lisp 的现代教学方言，语法更简洁、逻辑更纯粹。
+
+---
+
+## 🧩 二、Symbolic Programming（符号化编程）
+
+在一般语言（如 Python）中：
+
+```python
+a = 1
+b = 2
+[a, b]   # -> [1, 2]
+```
+
+在 Scheme 中：
+
+```scheme
+(define a 1)
+(define b 2)
+(list a b)   ; => (1 2)
+```
+
+但如果我们想要得到符号本身 `(a b)`，而不是它们的值 `(1 2)`，  
+就要用 **quotation（引用）**。
+
+---
+
+## ✨ 三、Quotation（引用）
+
+```scheme
+(list 'a 'b)   ; => (a b)
+```
+
+解释：
+- `'a` 是 `(quote a)` 的简写；
+- `quote` 表示「不要求值」，把表达式本身当作数据。
+
+| 表达式 | 含义 | 结果 |
+|----------|--------|--------|
+| `(list a b)` | 变量求值后组成列表 | `(1 2)` |
+| `(list 'a 'b)` | 引用符号本身 | `(a b)` |
+| `(list 'a b)` | 混合：符号 + 值 | `(a 2)` |
+
+---
+
+## 💻 四、在 VS Code 中运行 Scheme
+
+如果你使用 MIT Scheme 解释器：
+
+- 当你点击 “Run Scheme” 时，文件会被“加载”；
+- **不会自动打印最后一行结果**；
+- 如果想看到输出，需要用：
+
+```scheme
+(display (list a b))
+(newline)
+```
+
+解释：
+- `(display ...)`：打印结果；
+- `(newline)`：换行。
+
+输出示例：
+```
+(1 2)
+```
+
+---
+
+## ⚙️ 五、常见错误与修正
+
+| 错误代码 | 问题原因 | 修正写法 |
+|-----------|------------|------------|
+| `(display((list a b)))` | 双括号，Scheme 以为 `(1 2)` 是函数 | `(display (list a b))` |
+| `(display (a, b, c))` | Scheme 中 `,` 不是分隔符，而是 `unquote` | `(display '(a b c))` |
+| 运行无输出 | 文件执行不自动打印结果 | 加 `(display ...)` |
+| 运行时报 “object not applicable” | 尝试调用非函数对象 | 检查括号嵌套 |
+
+---
+
+## 🟩 六、注释写法
+
+| 类型 | 语法 | 说明 |
+|------|------|------|
+| 单行注释 | `; 这是注释` | 从 `;` 到行尾都是注释 |
+| 块注释 | `#| 多行注释 |#` | 可多行、可嵌套 |
+
+示例：
+```scheme
+; 定义变量
+(define a 1)
+
+#|
+(define b 2)
+(display a)
+|#
+```
+
+---
+
+## 🧱 七、列表操作：`car` 与 `cdr`
+
+假设我们有：
+```scheme
+'(a b c)
+```
+
+### 1️⃣ `car`
+取列表第一个元素：
+```scheme
+(car '(a b c))   ; => a
+```
+
+### 2️⃣ `cdr`
+取除第一个元素外的“剩余列表”：
+```scheme
+(cdr '(a b c))   ; => (b c)
+```
+
+### 3️⃣ 组合用法
+```scheme
+(cadr '(a b c))   ; 第二个元素 => b
+(caddr '(a b c))  ; 第三个元素 => c
+```
+
+| 函数 | 等价形式 | 结果 |
+|--------|--------------|--------|
+| `car` | 第一个元素 | `a` |
+| `cdr` | 剩下的元素 | `(b c)` |
+| `cadr` | `(car (cdr ...))` | `b` |
+| `caddr` | `(car (cdr (cdr ...)))` | `c` |
+
+---
+
+## 🚫 八、关于错误字幕 “cutter”
+
+> 视频字幕里说的 “cutter” 实际上是 **“cdr”** 的听写错误。
+
+原句应为：
+> “The car of that is the symbol A, and the **cdr** of that is the list containing the symbols B and C.”
+
+---
+
+## 📦 九、总结：Scheme 编程核心思路
+
+| 概念 | 含义 | 示例 |
+|------|------|------|
+| `define` | 定义变量或函数 | `(define a 1)` |
+| `list` | 创建列表 | `(list 1 2 3)` |
+| `quote` / `'` | 阻止求值 | `'a` 或 `'(1 2)` |
+| `car` / `cdr` | 取列表元素 | `(car '(a b c))` |
+| `display` | 打印输出 | `(display (list a b))` |
+| `newline` | 换行 | `(newline)` |
+
+---
+
+## 💬 十、常用调试小技巧
+
+- 想看 Scheme 文件运行结果？  
+  → 用 `(display ...)` 输出。  
+- 想在 REPL 测试？  
+  → 输入 `(load "filename.scm")`。  
+- 想临时屏蔽一段代码？  
+  → 用 `#| ... |#` 包起来。
+
+---
+
+## 🧭 十一、学习路线建议
+
+1. **掌握基础语法**（`define`, `if`, `lambda`, `list`, `car`, `cdr`）
+2. **理解函数式思想**（函数是一等公民）
+3. **学习递归与高阶函数**
+4. **探索 SICP 内容**（构造解释器、宏、元编程）
+
+---
+
+✅ **一句话总结**
+> Scheme 是一门思想极简但威力巨大的语言。  
+> 理解 `quote`、`list`、`car`、`cdr`，你就已经踏入了 SICP 的核心世界。

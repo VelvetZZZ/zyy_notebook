@@ -15,6 +15,13 @@
 (display'(a b c))
 (newline)
 (display(car '(a b c)))
+(newline)
+
+(display 'a)
+(display (quote a))
+(newline)
+(display (cons 'a nil)) #｜ 
+
 
 
 
