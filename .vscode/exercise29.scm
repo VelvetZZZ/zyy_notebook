@@ -30,9 +30,29 @@ nil 在 MIT Scheme 里不是定义好的变量，
 (display (cons 'a '()))
 (newline)
 (display (cons (quote a) '()))
+(newline)
 #|单引号的好处是节省了一组嵌套的括号|#
 
 '(1 2);(1 2)
 '(1 a);(1 a)
 (list 1 'a);(1 a)
 (list 1 a);Error:unknown identifier:a
+#|在定义a之前无法对其进行评估,
+但可以在定义之前引用a,因为它只是一个符号|#
+
+;List Processing
+(display(append '(1 2) '(3 4)))
+(newline)
+
+(display(map (lambda (x) (* x x)) '(1 2 3 4)))
+(newline)
+
+(display(filter (lambda(x)(> x 2)) '(1 2 3 4 5)))
+(newline)
+
+(display(apply + '(1 2 3 4)))
+(newline)
+
+
+
+
