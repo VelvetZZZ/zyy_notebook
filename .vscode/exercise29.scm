@@ -53,6 +53,57 @@ nil 在 MIT Scheme 里不是定义好的变量，
 (display(apply + '(1 2 3 4)))
 (newline)
 
+(define s (cons 1 (cons 2 ())))
+(display(map even? s))
+(newline)
+(display(filter even? s))
+(newline)
+
+(display(apply quotient '(10 5)))
+
+;Example: Even Subsets  偶数子集
+; ==========================================================
+; even-subsets.scm
+; Generate all non-empty subsets of integer list s
+; that have an even or odd sum.
+; ==========================================================
+
+(define (even-subsets s)
+  (if (null? s)
+      '()  ; base case: empty list → no subsets
+      (append
+        (if (even? (car s))
+            (map (lambda (t) (cons (car s) t))
+                 (even-subsets (cdr s)))   ; 保持偶数性
+            (map (lambda (t) (cons (car s) t))
+                 (odd-subsets (cdr s))))   ; 翻转奇偶性
+        (if (even? (car s))
+            (even-subsets (cdr s))
+            (odd-subsets (cdr s)))
+        (if (even? (car s))
+            (if (even? (car s)) (list (list (car s))) '())
+            (if (even? (car s)) '() (list (list (car s))))))))
+
+(define (odd-subsets s)
+  (if (null? s)
+      '()
+      (append
+        (if (odd? (car s))
+            (map (lambda (t) (cons (car s) t))
+                 (even-subsets (cdr s)))   ; 翻转奇偶性
+            (map (lambda (t) (cons (car s) t))
+                 (odd-subsets (cdr s))))   ; 保持奇数性
+        (if (odd? (car s))
+            (even-subsets (cdr s))
+            (odd-subsets (cdr s)))
+        (if (odd? (car s))
+            (list (list (car s)))
+            '()))))
+
+; 测试
+(display (even-subsets '(3 4 5 7))) (newline)
+(display (odd-subsets '(3 4 5 7)))  (newline)
+
 
 
 
