@@ -12,9 +12,9 @@
 (newline);Quatation
 
 ;Quotation can also be applied to combinations to from lists.
-(display'(a, b, c))
+(display'(a b c))
 (newline)
-(display(car '(a, b, c)))
+(display(car '(a b c)))
 
 
 
