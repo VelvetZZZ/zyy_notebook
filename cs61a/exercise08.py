@@ -156,3 +156,14 @@ def sum_digits(n):
         all_but_last = n // 10   # 去掉最后一位（123 → 12）
         last = n % 10            # 取最后一位（123 → 3）
         return sum_digits(all_but_last) + last  # 继续处理剩下的数字，并累加最后一位
+    
+
+# write a function that returns the factorial of n
+def factorial(n):
+    if n == 0:          # 0 的阶乘是 1
+        return 1
+    else:
+        return n * factorial(n - 1)  # n 的阶乘是 n * (n-1) 的阶乘
+
+
+
