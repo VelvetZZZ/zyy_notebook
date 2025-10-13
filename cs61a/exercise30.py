@@ -44,3 +44,38 @@ a = invert_safe(2)
 print(a)
 b = invert_safe(0)
 print(b)
+
+#Example：Reduce
+#Reducing a Sequence to a Value
+from operator import truediv, mul, add
+def divide_all(n, ds):
+    try:
+        return reduce(truediv, ds, n)
+    except ZeroDivisionError:
+        return float('inf')
+    
+def reduce(f, s, initial):
+    """Combine elements of s using f starting with initial.
+    >>> reduce(mul,[2, 4, 8], 1)
+    64
+    >>>reduce(add, [1, 2, 3, 4], 0)
+    10
+    """
+    for x in s:
+        initial = f(initial, x)
+    return initial#迭代实现
+
+def reduce(f, s, initial):
+    if not s:
+        return initial
+    else:
+        first, rest = s[0], s[1:]
+        return reduce(f, rest, f(initial, first))#递归实现
+    
+
+print(divide_all(1024,[2, 4, 0, 8]))
+print(divide_all(1024,[2, 4, 8]))
+
+#Programming Languages
+
+    
