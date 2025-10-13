@@ -247,3 +247,99 @@ Program continues...
 `try-except` 是 Python 异常处理的核心机制。  
 合理使用它，可以让程序更加健壮、可控。
 
+
+
+# 🐍 Python 异常捕获中的 `as e` 讲解
+
+## 一、基本语法
+
+```python
+except <ExceptionType> as <variable>:
+```
+- `<ExceptionType>`：要捕获的异常类型，例如 `ZeroDivisionError`。
+- `<variable>`：保存异常对象的变量名（通常命名为 `e` 或 `err`）。
+
+示例：
+
+```python
+except ZeroDivisionError as e:
+```
+表示：  
+> 当捕获到 `ZeroDivisionError` 异常时，把该异常对象赋值给变量 `e`。
+
+---
+
+## 二、`e` 的作用
+
+### 1️⃣ 获取异常的详细信息
+
+```python
+def invert_safe(x):
+    try:
+        return 1 / x
+    except ZeroDivisionError as e:
+        print("Caught error:", e)
+        return 0
+```
+
+运行：
+
+```python
+invert_safe(0)
+```
+输出：
+```
+Caught error: division by zero
+```
+
+💡 `e` 是一个异常对象（`ZeroDivisionError` 实例），  
+其中包含异常的描述信息，比如 “division by zero”。
+
+---
+
+### 2️⃣ 重新抛出异常
+
+```python
+except ZeroDivisionError as e:
+    print("Logging:", e)
+    raise   # 重新抛出相同异常
+```
+
+📘 用途：可以在处理前先记录日志或执行清理操作，然后继续让异常向外传播。
+
+---
+
+### 3️⃣ 根据异常信息执行不同逻辑
+
+```python
+except ZeroDivisionError as e:
+    if "zero" in str(e):
+        return "Cannot divide by zero"
+    else:
+        return "Other math error"
+```
+
+✅ 通过 `str(e)` 读取错误信息，可用于自定义处理逻辑。
+
+---
+
+## 三、对比说明
+
+| 写法 | 含义 | 能否访问异常详情 |
+|------|------|----------------|
+| `except ZeroDivisionError:` | 捕获异常但不保存对象 | ❌ |
+| `except ZeroDivisionError as e:` | 捕获异常并保存到变量 `e` | ✅ |
+
+---
+
+## 四、总结
+
+- `as e` 用于接收异常对象。
+- 可以用来 **打印错误信息**、**记录日志**、**重新抛出异常** 等。
+- 建议在调试和日志记录时总是使用 `as e`，便于追踪问题。
+
+---
+
+✅ **一句话总结：**
+> `as e` 把捕获的异常保存为对象，便于读取和操作错误信息。
+
