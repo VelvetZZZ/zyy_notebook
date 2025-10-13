@@ -143,3 +143,107 @@ print(type(d) == Animal)  # False
 
 - `isinstance()` 更灵活，更推荐在面向对象编程中使用；  
 - `type()` 仅用于你需要**精确判断类型**时使用。
+
+# 🐍 Python 异常处理 —— Try 语句 (Try Statements)
+
+## 一、概念
+
+> **Try statements handle exceptions**
+>
+> `try` 语句用于捕获并处理程序运行中发生的异常，使程序不会因为错误而崩溃。
+
+---
+
+## 二、基本语法结构
+
+```python
+try:
+    <try suite>
+except <exception class> as <name>:
+    <except suite>
+```
+
+### 各部分解释
+
+| 部分 | 含义 |
+|------|------|
+| `try:` | 开始一个可能出错的代码块 |
+| `<try suite>` | 要执行的代码（可能抛出异常） |
+| `except <exception class> as <name>:` | 捕获指定类型的异常，将异常对象命名为 `<name>` |
+| `<except suite>` | 当捕获到异常时要执行的代码 |
+
+---
+
+## 三、执行规则 (Execution rule)
+
+1️⃣ **执行顺序**  
+- 先执行 `try` 块中的代码。  
+- 如果没有发生异常 → 跳过 `except`，程序继续运行。
+
+2️⃣ **如果发生异常**  
+- 当 `try` 块中出现异常时：  
+  - Python 会查找匹配的 `except` 分支；  
+  - 如果异常类型匹配 → 执行对应的 `except` 代码；  
+  - 若写了 `as <name>`，异常对象会绑定到 `<name>` 变量；  
+  - 执行完 `except` 后，程序继续向下运行（不会崩溃）。
+
+---
+
+## 四、示例讲解
+
+```python
+try:
+    x = int(input("Enter a number: "))
+    print(10 / x)
+except ZeroDivisionError as e:
+    print("Cannot divide by zero:", e)
+```
+
+运行效果：
+
+| 输入 | 输出 | 说明 |
+|------|------|------|
+| `5` | `2.0` | 正常执行 |
+| `0` | `Cannot divide by zero: division by zero` | 捕获异常并继续运行 |
+
+---
+
+## 五、示例：打印错误但继续执行
+
+> “If the except suite just says, you know, print out an error message but keep running, that’s exactly what will happen.”
+
+```python
+try:
+    print(10 / 0)
+except ZeroDivisionError:
+    print("Oops, division by zero!")  # 打印错误信息
+print("Program continues...")
+```
+
+输出结果：
+
+```
+Oops, division by zero!
+Program continues...
+```
+
+✅ 程序没有崩溃，而是继续运行。
+
+---
+
+## 六、小结
+
+| 概念 | 含义 |
+|------|------|
+| `try` | 包含可能出错的代码 |
+| `except` | 定义异常的处理方式 |
+| `as <name>` | 获取异常对象 |
+| 程序流程 | try → except（如果异常） → 继续执行 |
+| 优点 | 防止程序崩溃，提供友好的错误处理机制 |
+
+---
+
+💡 **结论：**
+`try-except` 是 Python 异常处理的核心机制。  
+合理使用它，可以让程序更加健壮、可控。
+
