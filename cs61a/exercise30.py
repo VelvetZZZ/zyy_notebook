@@ -77,5 +77,85 @@ print(divide_all(1024,[2, 4, 0, 8]))
 print(divide_all(1024,[2, 4, 8]))
 
 #Programming Languages
+#Parsing 解析
+#Scheme-Syntax Calculator
+#Evaluation 计算
+#The Eval Function
+from operator import add, sub, mul, truediv
+from functools import reduce
+
+# Helper: Convert Python list to Scheme-style linked list (for demo purposes)
+class Pair:
+    def __init__(self, first, rest):
+        self.first = first
+        self.rest = rest
+
+    def __repr__(self):
+        return f"Pair({self.first}, {self.rest})"
+
+nil = None  # Scheme’s empty list representation
+
+def as_scheme_list(*args):
+    """Convert Python values to nested Pair linked list."""
+    if not args:
+        return nil
+    first, *rest = args
+    return Pair(first, as_scheme_list(*rest))
+
+# --------------------------------------------------
+# calc_apply: Apply operator to argument list
+# --------------------------------------------------
+def calc_apply(operator, args):
+    """Apply the named operator to a list of args."""
+    if not isinstance(operator, str):
+        raise TypeError(str(operator) + ' is not a symbol')
+
+    if operator == '+':
+        return reduce(add, args, 0)
+    elif operator == '-':
+        if len(args) == 0:
+            raise TypeError(operator + ' requires at least 1 argument')
+        elif len(args) == 1:
+            return -args[0]
+        else:
+            return reduce(sub, args[1:], args[0])
+    elif operator == '*':
+        return reduce(mul, args, 1)
+    elif operator == '/':
+        if len(args) == 0:
+            raise TypeError(operator + ' requires at least 1 argument')
+        elif len(args) == 1:
+            return 1 / args[0]
+        else:
+            return reduce(truediv, args[1:], args[0])
+    else:
+        raise TypeError(operator + ' is an unknown operator')
+
+# --------------------------------------------------
+# 测试示例（对应讲师演示内容）
+# --------------------------------------------------
+print(calc_apply('+', [1, 2, 3]))        # 6
+print(calc_apply('-', [10, 2, 3]))       # 5
+print(calc_apply('*', [2, 3, 4]))        # 24
+print(calc_apply('/', [100, 4]))         # 25.0
+print(calc_apply('/', [1024, 2, 2, 2, 2]))  # 64.0
+
+# 错误情况
+try:
+    print(calc_apply('?', [2, 3]))
+except Exception as e:
+    print('Error:', e)
+
+try:
+    print(calc_apply('-', []))
+except Exception as e:
+    print('Error:', e)
+
+
+
+
+    
+#Interactive Interpreters
+
 
     
