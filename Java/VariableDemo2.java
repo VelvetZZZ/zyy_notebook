@@ -15,6 +15,7 @@ public class VariableDemo2 {
         long l = 40L;
         System.out.println(l);
         //float
+        //定义float类型的变量，数值后面要加F/f
         float f = 50.0F;
         System.out.println(f);
         //double
