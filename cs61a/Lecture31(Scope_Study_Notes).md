@@ -142,3 +142,31 @@ class Frame:
 解释器本质上是通过这两个函数交替进行递归调用来解释一整门语言。理解这张结构图，你就理解了 Scheme 的解释器核心。
 
 ---
+
+---
+
+## 🧩 Procedure Definition 是 lambda 的简写
+
+在 Scheme 中，过程（procedure）的定义方式其实是 `lambda` 表达式的语法糖（shorthand）。
+
+### ✅ 等价写法对比：
+
+#### 简写形式（常见）：
+```scheme
+(define (square x) (* x x))
+```
+
+#### 展开形式（等价）：
+```scheme
+(define square (lambda (x) (* x x)))
+```
+
+### 🧠 解释：
+- `(define (f args) body)` 会被解释器自动转换为 `(define f (lambda (args) body))`
+- `define` 是“绑定”，`lambda` 是“构造过程”
+- 所以这两个写法没有语义上的区别，只是语法更简洁而已
+
+### ✅ 用途：
+- 简写更可读，适合日常代码书写
+- 展开形式更清楚函数是“过程值”，有助于理解函数式编程本质
+
