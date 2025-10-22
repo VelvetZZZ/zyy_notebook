@@ -1,4 +1,4 @@
-# Scheme & 编程语言作用域学习笔记：Lexical Scope 与 Dynamic Scope
+# Scheme 学习笔记：作用域与解释器结构
 
 ---
 
@@ -32,8 +32,6 @@
 (bar) ; => 5
 ```
 
-即使 `foo` 在 `bar` 中被调用，但它定义时看到的 `x` 是全局的 `5`。
-
 ---
 
 ## 📕 2. Dynamic Scope（动态作用域）
@@ -58,19 +56,9 @@
 (g 3 7) ; => 13 （在 dynamic scope 下）
 ```
 
-在 `f` 中使用了 `y`，虽然定义时看不到 `y`，但调用时 `g` 有 `y=7`，所以成功执行。
-
 ---
 
-## 🧪 两种作用域结果对比：
-
-代码：
-
-```scheme
-(define f (lambda (x) (+ x y)))
-(define g (lambda (x y) (f (+ x x))))
-(g 3 7)
-```
+## 🧪 作用域行为对比：
 
 | Scope 类型       | 查找规则               | 执行结果        |
 |------------------|------------------------|------------------|
@@ -79,17 +67,15 @@
 
 ---
 
-## ⚙️ 是否可以两种作用域并存？
+## ⚙️ 两种作用域可以共存吗？
 
-- ✅ 理论上可以（可以在解释器中实现）
-- ⚠️ 实际上很少这样做，容易引发混乱
-- Emacs Lisp 支持 dynamic scope，但可通过设置使用 lexical scope
+- ✅ 理论上可以（写解释器时控制 Frame parent）
+- ⚠️ 实际上不推荐共存，容易产生困惑与 bug
+- Emacs Lisp 提供切换 dynamic/lexical 的机制
 
 ---
 
-## 🧱 用 Python 实现作用域模拟
-
-你可以自己用 Python 实现作用域规则：
+## 🧱 Python 实现作用域查找（人工模拟）
 
 ```python
 class Frame:
@@ -109,22 +95,50 @@ class Frame:
             raise NameError("Unbound variable: " + name)
 ```
 
-想要动态作用域？调用函数时将 `caller_env` 设为 parent 即可！
+---
+
+## 🧠 解释器结构：Eval 与 Apply
+
+### 🧩 Eval（evaluate）
+- **理解表达式，判断要做什么**
+- Base Cases：
+  - 数字 → 直接返回
+  - 变量 → 查找其绑定值（symbol lookup）
+- Recursive Cases：
+  - 函数调用 → eval 操作符 & 参数 → 再 apply
+  - 特殊形式 → eval 各个子表达式
+
+### 🧩 Apply（application）
+- **执行过程或函数，做事情**
+- Base Case：
+  - 内建函数（如 `+`、`*`） → 直接调用
+- Recursive Case：
+  - 用户自定义函数 → 创建新环境 → eval 函数体
+
+### 🔄 工作流程总结：
+
+```scheme
+(define square (lambda (x) (* x x)))
+(square 5)
+```
+
+步骤：
+
+1. `eval` 识别 `(square 5)` 是函数调用
+2. `eval(square)` → 是个函数对象
+3. `eval(5)` → 得到 5
+4. `apply(square, 5)` → 创建新 frame，x=5
+5. `eval(* x x)` → 最终计算出 25
 
 ---
 
-## 🧠 总结：Lexical vs Dynamic Scope
+## ✅ 总结：Eval vs Apply
 
-| 项目 | Lexical Scope | Dynamic Scope |
-|------|----------------|----------------|
-| 查变量起点 | 函数定义时的环境 | 函数调用时的环境 |
-| 易读性 | ✅ 好 | ❌ 差 |
-| 可维护性 | ✅ 高 | ❌ 低 |
-| 应用语言 | Python、Scheme、JS | Bash、Emacs Lisp（默认） |
-| 示例结果 | 报错或正常，固定行为 | 行为依赖上下文调用 |
+| 函数 | 作用 | 比喻 |
+|------|------|------|
+| `eval` | 判断做什么 | “理解任务” |
+| `apply` | 执行过程 | “完成任务” |
+
+解释器本质上是通过这两个函数交替进行递归调用来解释一整门语言。理解这张结构图，你就理解了 Scheme 的解释器核心。
 
 ---
-
-## 🎓 结语
-
-理解作用域是掌握编程语言和解释器设计的核心。你可以用 Python/Scheme 完全“人工”实现作用域系统，甚至自由切换词法和动态作用域！
