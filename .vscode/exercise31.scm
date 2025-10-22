@@ -29,3 +29,6 @@
   (show "  b. #t" #t)
   (show "  c. #f" #f)
   (display "Hi") (newline))
+
+
+;Dynamic Scope
