@@ -222,3 +222,8 @@ cond 是 Scheme 里的多重条件语句，相当于 Python 中的 if-elif-else 
 	•	and / or 是逻辑连接，具有“短路”特性
 	•	cond 是多分支判断语句，遇真即停
 	•	所有这些都不会像函数一样“全都执行”，而是根据条件“挑着执行”
+
+
+# Lambda Expressions
+见另一笔记
+
