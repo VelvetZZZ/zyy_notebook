@@ -25,17 +25,51 @@
 1. **lambda 表达式中最后一个子表达式**  
    - 只有最后一个语句才是尾调用。
 
+e.g.
+
+(lambda (x)
+  (display x)          ; 不是尾调用
+  (+ x 1))             ; ✅ 是尾调用（最后一个表达式）
+
+ (define (f x)
+  (g x))               ; ✅ 是尾调用
+
 2. **if 表达式中第2和第3个子表达式**  
    - `if <test> <then> <else>` 中的 `<then>` 和 `<else>` 可以是 tail context。
 
+e.g.
+(define (f x)
+  (if (= x 0)
+      0                          ; ✅ 是尾调用
+      (g x)))                    ; ✅ 是尾调用
+
 3. **cond 中所有非谓词（predicate）子表达式**  
    - 只要不是条件判断部分，就可以是尾调用上下文。
+   - cond 就像是多重 if，每个匹配条件的分支中最后执行的表达式构成尾调用。
+
+e.g.
+(define (f x)
+  (cond
+    [(= x 0) 0]                  ; ✅ 是尾调用
+    [(= x 1) (g x)]              ; ✅ 是尾调用
+    [else (h x)]))               ; ✅ 是尾调用
 
 4. **and / or 表达式中的最后一个子表达式**
+- and 和 or 是逻辑表达式，只有最后一个子表达式是尾调用。
+
+e.g.
+(define (f x)
+  (and (positive? x)
+       (g x)))                   ; ✅ 是尾调用
 
 5. **begin 表达式中最后一个子表达式**
+- begin 表示顺序执行一组表达式，只有最后一行是尾调用。
 
----
+e.g.
+(begin
+  (display "hello")
+  (compute-result))             ; ✅ 是尾调用
+
 
 ## 💡 示例代码解释
 
