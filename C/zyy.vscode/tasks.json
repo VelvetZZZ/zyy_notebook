@@ -2,18 +2,20 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build and run C",
+      "label": "build exercise01.c",
       "type": "shell",
-      "command": "sh",
+      "command": "clang",
       "args": [
-        "-c",
-        "clang ${file} -o ${fileDirname}/${fileBasenameNoExtension} && ${fileDirname}/${fileBasenameNoExtension}"
+        "-g",
+        "${file}",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}"
       ],
       "group": {
         "kind": "build",
         "isDefault": true
       },
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": []
     }
   ]
 }
