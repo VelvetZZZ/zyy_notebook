@@ -5,7 +5,7 @@ void program1() {
 }
 
 void program2() {
-    printf("Hello World!\n");
+    printf("Hello World!\n");//\n表示换行
 }
 
 int main() {
