@@ -1,20 +1,19 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "build and run C",
-            "type": "shell",
-            "command": "clang",
-            "args": [
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$gcc"]
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build and run C",
+      "type": "shell",
+      "command": "sh",
+      "args": [
+        "-c",
+        "clang ${file} -o ${fileDirname}/${fileBasenameNoExtension} && ${fileDirname}/${fileBasenameNoExtension}"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    }
+  ]
 }
