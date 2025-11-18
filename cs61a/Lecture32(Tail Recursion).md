@@ -121,3 +121,64 @@ e.g.
 A procedure call that has not yet returned is active.
 Some procedure calls are tail calls.
 A Scheme interpreter should support an unbounded number of active tail calls using only a constant amount of space.
+
+
+
+# 以列表长度计算为例：递归 vs 尾递归
+
+## 列表长度的普通递归版本
+
+```scheme
+(define (length s)
+  (if (null? s)
+      0
+      (+ 1 (length (cdr s)))))
+```
+### 代码含义:
+	•	(null? s)：判断列表是否为空
+	•	空列表长度为 0
+	•	非空列表长度 = 1 + 剩余列表长度
+	•	(cdr s)：列表去掉第一个元素后的部分
+
+*递归调用返回后，还要执行 + 1* 
+因此递归调用不是整个函数的最终值，不属于尾调用。
+
+### 结果:
+	•	每层递归都需要等待下一层返回后进行加法
+	•	调用栈会随着列表长度线性增长
+	•	列表太长可能导致 **栈溢出**
+
+##列表长度的尾递归版本
+
+```scheme
+(define (length-tail s)
+  (define (length-iter s n)
+    (if (null? s)
+      n
+      (length-iter (cdr s)(+ n 1))))
+      (length-iter s 0))
+```
+### 代码含义:
+
+该版本引入一个内部迭代函数：
+	•	s：当前剩余列表
+	•	n：累计计数器（已数到的长度）
+
+### 流程：
+	1.	初始调用 (length-iter s 0)，从 0 计数
+	2.	每次递归都将：
+	•	列表缩短（cdr s）
+	•	计数器增加（(+ n 1)）
+	3.	当 s 为空时返回 n
+递归调用是整个 if 表达式的最终返回值：(length-iter (cdr s) (+ n 1))
+
+### 优点
+	•	Scheme 会对尾调用进行优化（TCO）
+	•	不增长调用栈，空间复杂度为 O(1)
+	•	相当于编译器把递归实现为循环
+
+  尾递归相当于一个循环：
+  while s not empty:
+    s = cdr(s)
+    n++
+return n
