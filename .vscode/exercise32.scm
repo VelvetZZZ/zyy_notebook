@@ -47,6 +47,7 @@ print(factorial(5, 1))
 (display (factorial 10 1))
 (newline)   
 (display (factorial 100 1))
+(newline)
 #|Scheme 明确要求 尾调用优化是语言强制的特性|#
 
 
@@ -94,7 +95,9 @@ print(factorial(5, 1))
 #| *(*(*(2,3),4),5) = 120 |#
 
 ;用 cons 反转列表（仍然常量空间）
-(reduce (lambda (x y) (cons y x))
-        '(3 4 5)
-        '(2))
+
+(display
+ (reduce (lambda (x y) (cons y x))
+         '(3 4 5)
+         '(2)))
 #;(2) → (4 2) → (5 4 2) → (5 4 3 2)
