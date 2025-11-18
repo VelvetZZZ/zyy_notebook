@@ -37,6 +37,7 @@ print(factorial(5, 1))
 #|尾递归|#
 
 
+;tail-call optimization
 ; Returns n! * k
 (define (factorial n k)
     (if (zero? n) k
@@ -45,6 +46,7 @@ print(factorial(5, 1))
 (newline)
 (display (factorial 10 1))
 (newline)   
-
+(display (factorial 100 1))
+#|Scheme 明确要求 尾调用优化是语言强制的特性|#
 
 
