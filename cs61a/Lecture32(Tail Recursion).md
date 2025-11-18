@@ -284,3 +284,28 @@ return n
 “the whole thing runs in constant space.”
 
 > 只要所有递归不会生成未完成的操作（no pending work），解释器就可做 TCO → 空间 Θ(1)。
+
+
+# reduce —— 尾递归框架 + 非尾调用操作
+```scheme
+(define (reduce procedure s start)
+  (if (null? s)
+      start
+      (reduce procedure
+              (cdr s)
+              (procedure start (car s))))) ; ❌ procedure 不在尾上下文
+```
+重要理解：
+	•	reduce 的 递归调用在尾上下文 → reduce 框架是 O(1)
+	•	但调用的 procedure 不在尾上下文（作为参数），是否增加空间取决于：
+procedure 是否需要 O(1) 空间？
+
+老师总结：
+
+If procedure itself runs in constant space,
+then the entire reduce runs in constant space.
+> 不是所有非尾调用都会增加空间，只有非尾递归才会。
+非尾调用如果调用的是 O(1) 函数，也不会破坏整体 O(1)。
+
+
+**reduce 用一个过程从左到右依次把元素和累积值合并，并在尾递归框架下保持 O(1) 空间，只要该过程本身也是 O(1)。**
