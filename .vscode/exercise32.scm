@@ -79,3 +79,22 @@ print(factorial(5, 1))
       (if (contains? (cdr s) (car s))
           true
           (has-repeat (cdr s)))))
+
+
+;Example：Reduce
+(define (reduce procedure s start)
+  (if (null? s)
+      start
+      (reduce procedure
+              (cdr s)
+              (procedure start (car s)))))
+
+;计算乘积
+(reduce * '(3 4 5) 2)
+#| *(*(*(2,3),4),5) = 120 |#
+
+;用 cons 反转列表（仍然常量空间）
+(reduce (lambda (x y) (cons y x))
+        '(3 4 5)
+        '(2))
+#;(2) → (4 2) → (5 4 2) → (5 4 3 2)
