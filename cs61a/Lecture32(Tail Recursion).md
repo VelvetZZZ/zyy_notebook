@@ -308,4 +308,8 @@ then the entire reduce runs in constant space.
 非尾调用如果调用的是 O(1) 函数，也不会破坏整体 O(1)。
 
 
-**reduce 用一个过程从左到右依次把元素和累积值合并，并在尾递归框架下保持 O(1) 空间，只要该过程本身也是 O(1)。**
+**reduce 会从左到右，一个接一个地把列表里的元素“塞进”当前结果里，每次都用你提供的函数来决定怎么塞，并且整体过程不会额外占空间（如果你的函数本身很省空间）。**
+
+
+# Example:Map with Only a Constant Number of Frames
+
