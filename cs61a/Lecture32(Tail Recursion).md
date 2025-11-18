@@ -313,3 +313,79 @@ then the entire reduce runs in constant space.
 
 # Example:Map with Only a Constant Number of Frames
 
+目标：把 map 改写成尾递归（TCO），使其仅使用 O(1) 空间
+
+## 普通（非尾递归）map
+```scheme
+(define (map procedure s)
+  (if (null? s)
+      nil
+      (cons (procedure (car s))
+            (map procedure (cdr s)))))
+```
+ 特点：
+	•	(cons ...) 必须等待 (map ...) 返回
+	•	所以递归调用 不在尾部位置（not in tail context）
+	•	导致 栈深度 O(n)
+	•	空间复杂度 O(n)
+
+### 为何普通 map 不是尾递归？
+尾递归必须满足：
+递归调用是整个表达式的最终返回值
+
+但普通 map 的返回值结构是：(cons A (map B))
+ 递归 return 后还要执行 cons → 不是尾调用。
+
+## 改造思路：先构造“反向列表” → 最后 reverse 
+关键技巧：
+	1.	遍历每个元素时，将结果 累积到前面（cons 到 m 前面）
+	2.	得到一个“加工后的反向列表”
+	3.	最后再 reverse 得到正确顺序
+这样就可以让：(map-reverse ...)
+ 成为 整个表达式的最后一步 → 成为尾调用。
+
+ ## 尾递归版本 map（最终方案）
+ ```scheme
+ (define (map procedure s)
+  (define (map-reverse s m)
+    (if (null? s)
+        m
+        (map-reverse (cdr s)
+                     (cons (procedure (car s)) m))))
+  (reverse (map-reverse s nil)))
+```
+### 代码含义（参数说明）
+	•	procedure：对列表元素的处理函数
+	•	s：当前未处理的剩余列表
+	•	m：已经累积的“反向结果列表”
+
+### 流程（尾递归版本）
+	1.	初次调用 (map-reverse s nil)
+	2.	每次递归做两件事：
+	•	列表缩短：(cdr s)
+	•	结果累积：(cons (procedure (car s)) m)
+	3.	当 s 为空，返回累积好的 m
+	•	注意：这是“反向列表”
+	4.	最后执行 (reverse m) 得到正序 map 结果
+
+map-reverse 是尾递归，因为它是整个 if 的最终返回值。
+
+## 尾递归 reverse（用来把反向列表翻正）
+```scheme
+(define (reverse s)
+  (define (reverse-iter s r)
+    (if (null? s)
+        r
+        (reverse-iter (cdr s)
+                      (cons (car s) r))))
+  (reverse-iter s nil))
+```
+	同样是累积式尾递归
+	•	空间 O(1)
+
+## 最终总结
+	•	普通 map 不是尾递归 → 空间 O(n)
+	•	解决办法：使用“累积反向结果 + reverse”技巧
+	•	map-reverse 和 reverse 都是尾递归 → 全过程只需要常量栈帧
+
+尾递归 map 的核心技巧：反向构造 + 最后 reverse。

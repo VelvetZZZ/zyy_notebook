@@ -101,3 +101,30 @@ print(factorial(5, 1))
          '(3 4 5)
          '(2)))
 #;(2) → (4 2) → (5 4 2) → (5 4 3 2)
+
+;Map
+(define (map procedure s)
+    (if (null? s)
+        '()
+        (cons (procedure (car s))
+              (map procedure (cdr s)))))
+;map 是一个高阶函数，它把某个操作（procedure）作用到列表的每一个元素身上，返回一个“映射后”的新列表。
+
+
+(define (map procedure s)
+  (define (map-reverse s m)
+    (if (null? s)
+        m
+        (map-reverse (cdr s)
+                     (cons (procedure (car s)) m))))
+  (reverse (map-reverse s nil)))
+
+  (define (reverse s)
+  (define (reverse-iter s r)
+    (if (null? s)
+        r
+        (reverse-iter (cdr s)
+                      (cons (car s) r))))
+  (reverse-iter s nil))
+
+  ;#普通 map 不是尾递归，因为需要在递归返回后执行 cons。要让 map 变成尾递归，你必须先构造「反向映射列表」，最后 reverse，一切就都能在 O(1) 栈空间内完成。
