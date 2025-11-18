@@ -50,3 +50,32 @@ print(factorial(5, 1))
 #|Scheme 明确要求 尾调用优化是语言强制的特性|#
 
 
+(define (length s)
+  (+ 1
+     (if (null? s)
+         -1
+         (length (cdr s)))))
+
+
+(define (fib n)
+  (define (fib-iter current k)
+    (if (= k n)
+        current
+        (fib-iter (+ current (fib (- k 1)))
+                  (+ k 1)))))
+
+(define (contains s v)
+  (if (null? s)
+      false
+      (if (= v (car s))
+          true
+          (contains (cdr s) v))))
+
+
+
+(define (has-repeat s)
+  (if (null? s)
+      false
+      (if (contains? (cdr s) (car s))
+          true
+          (has-repeat (cdr s)))))

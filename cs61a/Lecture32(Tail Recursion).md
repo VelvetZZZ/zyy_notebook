@@ -125,6 +125,8 @@ A Scheme interpreter should support an unbounded number of active tail calls usi
 
 
 # 以列表长度计算为例：递归 vs 尾递归
+(Eval with Tail Call Optimization
+支持尾调用优化的Eval（求值过程）)
 
 ## 列表长度的普通递归版本
 
@@ -182,3 +184,103 @@ A Scheme interpreter should support an unbounded number of active tail calls usi
     s = cdr(s)
     n++
 return n
+
+
+## 🌀 Which Procedures Are Tail Recursive?（尾递归判断速记）
+
+> **问题：下面哪些过程能在 Θ(1) 常量空间内运行？**  
+> 判断标准：递归调用是否处于 **tail context（尾上下文）**。
+
+---
+
+###  什么是 Tail Context？
+
+- **尾上下文（tail context）**：  
+  一个函数调用作为“整个表达式的最终返回值”。  
+  - 递归调用后 **不再有额外操作**
+  - 解释器可进行 **尾调用优化（TCO）**
+  - 栈帧不增长 → **空间 Θ(1)**
+
+- **非尾上下文（not tail context）**：  
+  调用结果还要参与其它计算（如 `+`, `*`, 比较等）。  
+  - 栈帧持续增长 → **空间 Θ(n)**
+
+---
+
+## 1️⃣ `length` —— ❌ 非尾递归 → 空间 Θ(n)
+
+```scheme
+(define (length s)
+  (+ 1
+     (if (null? s)
+         -1
+         (length (cdr s)))))
+```
+红框部分：
+	•	(length (cdr s)) 被包在 (+ 1 …) 内
+	•	递归结果返回后 还有 pending work
+	•	➤ 不在 tail context
+	•	➤ 空间 Θ(n)
+
+  ## 2️⃣ fib —— ❌ 非尾递归 → 空间 Θ(n)
+```scheme
+(define (fib n)
+  (define (fib-iter current k)
+    (if (= k n)
+        current
+        (fib-iter (+ current (fib (- k 1)))
+                  (+ k 1)))))
+```
+	•	红框部分：
+	•	fib 的递归结果要参与 (+ current …)
+	•	不是尾调用
+	•	➤ 不在 tail context
+	•	➤ 空间 Θ(n)
+
+## 3️⃣ contains —— ✔ 尾递归 → 空间 Θ(1)
+```scheme
+(define (contains s v)
+  (if (null? s)
+      false
+      (if (= v (car s))
+          true
+          (contains (cdr s) v))))
+```
+	•	虚线框：
+	•	(contains (cdr s) v) 是整个分支的返回值
+	•	无额外操作
+	•	➤ 在 tail context
+	•	➤ 空间 Θ(1)
+	•	💬 老师强调：
+“contains already runs in constant space because it is tail recursive.”
+
+## 4️⃣ has-repeat —— ✔ 空间 Θ(1)
+```scheme
+(define (has-repeat s)
+  (if (null? s)
+      false
+      (if (contains? (cdr s) (car s))
+          true
+          (has-repeat (cdr s)))))
+```
+
+	注意两件事：
+
+🔸 (1) contains? 调用 不在 tail context
+	•	作为 if 的判断式
+	•	不是最终返回值
+	•	💬 老师：
+“when it calls contains, that’s not a tail context.”
+
+🔸 (2) 但整体空间仍是 Θ(1)
+因为：
+	•	has-repeat 对自身的调用在 tail context
+	•	contains? 本身是尾递归 → 空间 O(1)
+	•	两者均不积累栈帧
+
+因此：
+	•	➤ 整体空间仍是 Θ(1)
+	•	💬 老师：
+“the whole thing runs in constant space.”
+
+> 只要所有递归不会生成未完成的操作（no pending work），解释器就可做 TCO → 空间 Θ(1)。
