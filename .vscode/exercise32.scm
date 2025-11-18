@@ -20,7 +20,7 @@ print(factorial(5, 1))
 |#
 
 
-#Example:Length of a list
+;Example:Length of a list
 (define (length s)
     (if (null? s)
     0
@@ -36,6 +36,15 @@ print(factorial(5, 1))
 (newline)
 #|尾递归|#
 
+
+; Returns n! * k
+(define (factorial n k)
+    (if (zero? n) k
+        (factorial (- n 1) (* k n))))
+(display (factorial 5 1))
+(newline)
+(display (factorial 10 1))
+(newline)   
 
 
 
