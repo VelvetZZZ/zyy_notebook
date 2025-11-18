@@ -389,3 +389,74 @@ map-reverse 是尾递归，因为它是整个 if 的最终返回值。
 	•	map-reverse 和 reverse 都是尾递归 → 全过程只需要常量栈帧
 
 尾递归 map 的核心技巧：反向构造 + 最后 reverse。
+
+# Interpreters are General Computing Machines
+解释器（Interpreter）的本质与能力
+
+## 核心概念
+
+解释器 = 一个程序（program）
+
+	•	它读取输入（代码 / 表达式）
+	•	按照一套规则（evaluation rules）执行
+	•	输出结果
+
+解释器本身也是程序，不是魔法。
+
+
+## 解释器的能力
+
+ 解释器可以被参数化（parameterized）以模拟任何机器
+
+一句话总结：
+
+给解释器正确的规则，它就能模拟任何计算模型（图灵完备）。
+
+比如：
+```text
+输入：5  
+解释器执行 factorial 程序  
+输出：120
+```
+即：5 ——> Scheme Interpreter ——> 120
+
+## “通用计算机器”（Universal Machine）
+
+我们的 Scheme 解释器是“通用机器”（universal machine）：
+	•	可以运行任意 Scheme 程序
+	•	可以模拟任意可计算过程
+	•	与图灵机的能力等价
+
+能运行 factorial 的解释器，也能运行 map、reduce、求导数等所有可表达的程序。
+
+
+## 🔗 Scheme 解释器的角色
+
+解释器是：
+	•	编程语言（语法与规则）
+与
+	•	程序操作的数据对象（numbers / lists / lambdas）
+
+之间的桥梁。
+
+换句话说：
+
+解释器定义了语言的语义，让语言“活起来”。
+
+
+## 解释器内部是什么？
+
+老师总结得非常简洁：
+
+Internally, it is just a set of evaluation rules.
+（内部其实只是“一套求值规则”）
+
+例如：
+	•	如何求值 if
+	•	如何求值 lambda
+	•	如何求值 (+ 2 3)
+	•	如何求值 (f x)
+
+这些规则组合起来，就形成整个 Scheme 语言的行为。
+
+>解释器 = 用规则定义语言语义的程序，是一种通用计算机器，只要规则完备，就能模拟任意程序的运行。
