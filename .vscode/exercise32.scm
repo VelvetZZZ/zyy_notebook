@@ -20,3 +20,18 @@ print(factorial(5, 1))
 |#
 
 
+#Example:Length of a list
+(define (length s)
+    (if (null? s)
+    0
+    (+ 1 (length (cdr s)))))
+
+
+(define (length-tail s)
+    (define(length-iter s n)
+        (if (null? s) n
+            (length-iter (cdr s) (+ n 1)))
+            length-iter s 0))
+
+
+
