@@ -65,3 +65,55 @@ square-expr 就像一个零件工厂，生产 (* a a) 这种零件。
 最外层的调用就像装配线，把零件拼装成 (+ (* a a) (* b b)) 这种成品。
 
 牢记口诀： 看到反引号 是在造壳子，看到逗号,` 是在填肉（求值）。
+
+
+# Macros Perform Code Transformations (宏执行代码转换)
+## I. 宏 (Macro) 的核心定义
+
+定义：宏是一种在程序求值（Evaluation）之前，对源代码进行的操作。
+
+"A macro is an operation performed on the source code of a program before evaluation."
+
+适用性：宏存在于许多编程语言中，但在像 Lisp (Scheme) 这样的语言中定义起来最容易且正确。
+
+## II. Scheme 中的实现
+Scheme 使用 define-macro 这一特殊形式（Special Form）来定义源代码的转换规则。
+
+### 1. 示例代码：twice 宏
+这个宏的作用是将输入的表达式执行两次。
+
+```Scheme
+
+;; 定义宏
+(define-macro (twice expr)
+  (list 'begin expr expr))
+
+;; 调用演示
+;; 输入源代码： (twice (print 2))
+;; 宏展开结果： (begin (print 2) (print 2))
+;; 最终执行结果：
+;; 2
+;; 2
+```
+### 2. 核心区别 (The Golden Rule)
+这是宏与普通函数最本质的区别：
+
+"Macros take in expressions and return expressions instead of taking in values and returning values." (宏接受表达式并返回表达式，而不是接受值并返回值。)
+
+## III. 宏调用表达式的求值流程 (Evaluation Procedure)
+
+当解释器执行一个宏调用时，遵循以下三个严格步骤：
+
+- 评估操作符 (Evaluate the operator)
+
+- 确认该操作符绑定的是一个宏（Macro）。
+
+- 调用宏过程 (Call the macro procedure)
+
+将操作数表达式（Operand expressions）作为参数传递给宏。
+
+⚠️ 关键点：WITHOUT evaluating them first (不对参数进行求值，直接传代码文本)。
+
+评估返回的表达式 (Evaluate the returned expression)
+
+对宏过程返回的那段新代码（Expression）进行求值，这才是最终的执行步骤。
