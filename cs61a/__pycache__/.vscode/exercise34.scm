@@ -6,6 +6,5 @@
 
 ;Macros宏
 ;Macros Perform Code Transformations
-(define-macro (twice expr)
-   (list 'begin expr expr))
-   (display(twice (print 2)))
+
+
