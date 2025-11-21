@@ -205,3 +205,81 @@ vals:
 - 求值 (Evaluation):
 
 解释器执行这个生成的 map 表达式，计算出结果 (4 9 16 25)。
+
+
+# Trace Macro —— 为什么老师说它比 Python 更好？
+
+## I. 老师核心观点解读
+
+### Quote 1:
+ "Whereas in the Scheme version, we can call fact5 untraced sometimes and traced other times, and even switch back."
+ (在 Scheme 版本中，我们可以有时调用未追踪的 fact(5)，有时调用追踪它的版本，甚至可以切回来。)
+
+#### 解读：
+
+Python 的 @trace 是“永久性”的。一旦你在 def fact 头上写了 @trace，这个函数这辈子都被“监控”了。每次调用它都会打印日志，除非你去改源代码删掉那行装饰器。
+
+Scheme 的 (trace (fact 5)) 是“临时性”的。Macro 可以在这一次运算中把 fact 变成“监控版”，运算完立刻把它变回“原版”。
+
+Quote 2: "...this version's even better than Python's." (...这个版本甚至比 Python 的更好。)
+
+#### 解读：
+
+所谓“更好”，指的是控制的灵活性。我们不需要修改 fact 函数的定义，只需要在调用（Call） 的时候决定要不要监控它。这就是极致的 Separation of Concerns (关注点分离) —— 定义归定义，监控归监控，互不干扰。
+
+## II. 深度对比：Python Decorator vs. Scheme Macro
+为了方便理解，我们可以用“穿衣服”来比喻：
+
+| 特性 | Python (`@trace`) | Scheme Macro (`trace` in PPT) |
+| :--- | :--- | :--- |
+| **比喻** | **纹身** 🐉 | **穿戏服** 🎭 |
+| **生效时机** | **定义时** (Definition Time) | **调用时** (Call Time) |
+| **持久性** | **永久**。只要代码跑起来，`fact` 就永远带着监控功能。 | **临时**。只在那一行代码执行期间生效，跑完就恢复原样。 |
+| **灵活性** | **低**。想关掉监控必须改代码或重启程序。 | **高**。想监控就写 `(trace ...)`，不想监控就直接写 `(fact ...)`。 |
+| **副作用** | 修改了原本的函数对象。 | 临时劫持变量名，随后**自动还原**。 |
+
+## III. 核心代码原理分析 (The Magic of "Switch Back")
+为什么 Scheme 能做到“用完就恢复”？秘密就在 PPT 右边那个 Macro 的代码逻辑里。
+
+让我们拆解这段**“狸猫换太子，完事再换回来”**的代码：
+
+```Scheme
+
+(define-macro (trace expr)
+  (define operator (car expr)) ; 1. 拿到函数名，比如 'fact
+  `(begin
+     (define original ,operator) ; 2. 【备份】把原本的 fact 存起来
+     
+     (define ,operator (lambda (n)  ; 3. 【劫持】把 fact 变成监控版
+                         (print (list (quote ,operator) n))
+                         (original n)))
+     
+     (define result ,expr)       ; 4. 【执行】计算 (fact 5)，此时 fact 是监控版，会有日志
+     
+     (define ,operator original) ; 5. 【还原】关键一步！把 fact 变回原来的样子
+     
+     result))                    ; 6. 返回计算结果
+```
+#### 流程图解:
+开始前：fact 是干净的计算函数。
+
+执行 (trace (fact 5))：
+
+Macro 悄悄把全局的 fact 换成了 带打印功能的 fact。
+
+开始递归计算，屏幕疯狂打印 (fact 5), (fact 4)...
+
+计算结束拿到结果 120。
+
+结束时：Macro 悄悄把全局的 fact 换回 了那个干净的函数。
+
+再次执行 (fact 5)：
+
+因为 fact 已经被还原了，所以这次没有任何打印，静悄悄地算出了 120。
+
+## IV. 总结
+Python 装饰器：一旦修饰，终身生效。适合那些需要一直存在的全局日志。
+
+Scheme Trace 宏：按需注入。它展示了 Macro 修改语言语义的强大能力 —— 我们不仅修改了代码结构，甚至暂时修改了变量的绑定，用完还能“无痕”复原。
+
+这正是 Professor 感到兴奋的原因：我们拥有了对代码行为上帝般的控制权。
