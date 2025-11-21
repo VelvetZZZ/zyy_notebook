@@ -117,3 +117,91 @@ Scheme 使用 define-macro 这一特殊形式（Special Form）来定义源代�
 评估返回的表达式 (Evaluate the returned expression)
 
 对宏过程返回的那段新代码（Expression）进行求值，这才是最终的执行步骤。
+
+
+
+## Scheme 宏定义与语法扩展 (For 循环案例)
+
+### I. 核心目标
+
+利用 Scheme 的 宏 (Macro) 机制，为语言添加类似于 Python 的 for 循环 语法。 
+
+我们需要编写宏代码，将用户输入的  for结构  转换 (Transform) 为 Scheme 底层支持的 map 调用，从而实现对列表的遍历求值。
+
+### II. 解决方案代码
+
+#### 1. 核心转换逻辑
+宏的任务是充当“翻译官”。我们需要将左边的“源代码”翻译成右边的“可执行代码”。
+
+- 源代码 (Source): (for x vals expr)
+
+- 目标代码 (Target): (map (lambda (x) expr) vals)
+
+#### 2. 定义 "for" 宏
+
+我们要构造一个列表，其结构必须是 (map (lambda (sym) expr) vals)。 在这里，我们使用 list 函数来手动拼凑出这个列表结构。
+
+```Scheme
+
+;; 填空思路：
+;; 1. 第一个元素是符号 'map
+;; 2. 第二个元素是构造出的 lambda 表达式列表
+;; 3. 第三个元素是直接传入的数据 vals
+(define-macro (for sym vals expr)
+  (list 'map
+        (list 'lambda (list sym) expr)
+        vals))
+```
+
+#### 3. 实际调用效果
+当我们在解释器中运行这个宏时，它会先展开代码，再执行。
+
+```Scheme
+
+;; 调用：
+(for x '(2 3 4 5) (* x x))
+
+;; 宏展开后的等效代码 (系统自动执行)：
+;; (map (lambda (x) (* x x)) '(2 3 4 5))
+
+;; 最终输出结果：
+;; (4 9 16 25)
+```
+#### 4.构造过程详解
+
+我们需要拼凑出 (map (lambda (x) (* x x)) '(2 3 4 5)) 这个列表：
+
+```scheme
+'map:
+```
+列表的第一个元素是符号 map。
+
+```scheme
+(list 'lambda (list sym) expr):
+```
+列表的第二个元素是一个 lambda 表达式（也是一个列表）。
+
+这里需要把传入的变量名 sym (即 x) 包在括号里 (list sym) 作为参数列表。
+
+把 expr (即 (* x x)) 直接作为函数体。
+
+```scheme
+vals:
+```
+列表的第三个元素是直接传入的数据列表 '(2 3 4 5)。
+
+### IV. 运行流程示例
+
+当你运行 (for x '(2 3 4 5) (* x x)) 时：
+- 传递参数:
+  sym绑定为符号 'x
+  vals绑定为列表 '(2 3 4 5)
+  expr绑定为列表 '(* x x)
+- 宏展开 (Expansion):
+  Macro 内部执行 list 操作，生成新代码：
+
+  (map (lambda (x) (* x x)) '(2 3 4 5))
+
+- 求值 (Evaluation):
+
+解释器执行这个生成的 map 表达式，计算出结果 (4 9 16 25)。
