@@ -41,3 +41,7 @@ create table cities as
   select 42,             71,               "Cambridge"        union
   select 45,             93,               "Minneapolis";
   ```
+
+- select ... as ...：这里不是查询，而是声明静态数据。
+
+- union：将独立的行拼接 (Combine) 成一个完整的表。
