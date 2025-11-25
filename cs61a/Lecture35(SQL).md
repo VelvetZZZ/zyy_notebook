@@ -45,3 +45,8 @@ create table cities as
 - select ... as ...：这里不是查询，而是声明静态数据。
 
 - union：将独立的行拼接 (Combine) 成一个完整的表。
+
+## 2. 逻辑判断：Select & Union
+在 SQL 中没有 if-else，我们通过 ** 集合拼接**来实现条件分类。
+
+目标：经度>=115 标记为 "west coast"，否则标记为 "other"。
