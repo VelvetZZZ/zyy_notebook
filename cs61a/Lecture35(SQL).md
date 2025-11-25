@@ -56,3 +56,16 @@ select "west coast" as region, name from cities where longitude >= 115
 union
 select "other"      as region, name from cities where longitude < 115;
 ```
+### 实现原理：
+
+#### Literal Projection (常量投影)：
+select "west coast" as region。
+
+我们在查询结果中凭空创造了 region 这一列，并强制填入 "west coast"。
+
+#### 分治策略：
+先筛选出符合条件的子集 (Sub-set)。
+
+再筛选出不符合条件的子集。
+
+最后用 union 把两个子集合二为一
