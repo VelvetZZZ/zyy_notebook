@@ -117,3 +117,43 @@ PPT 下方的狗的照片不仅仅是装饰，它是接下来的核心数据集�
 ### 2. 解释器原理
 * 只要一张纸的代码量就能实现一个 `SELECT` 语句的解释器。这暗示了 SQL 声明式语法背后的实现逻辑其实非常优雅且精简。
 
+# Selecting Value Literals
+如何使用 SQL 构建静态数据表及层级关系
+
+## I. 基本语法规则
+### 1. 列的定义
+一个 `SELECT` 语句包含一系列用逗号分隔的列描述：
+* **语法**：`select [表达式] as [列名]`
+* **示例**：`select "abraham" as parent`
+    * `"abraham"` 是 **Literal (字面量)**，即写死的固定值。
+    * `parent` 是我们给这列起的列名。
+
+### 2. 行的拼接 (Union)
+* 单独的一个 `SELECT` 语句只能生成一行数据。
+* 使用 **`UNION`** 关键字将多个 `SELECT` 语句的结果合并，从而构建多行表格。
+
+## II. 实例分析：家族树 (Family Tree)
+这页 PPT 展示了如何用二维表来表示树形结构。
+
+### 1. 代码逻辑
+```sql
+select "abraham" as parent, "barack" as child union
+select "abraham"          , "clinton"       union
+select "delano"           , "herbert"       union
+select "fillmore"         , "abraham"       ...
+```
+- 第一行：定义了列名为 parent 和 child。
+
+- 后续行：不需要再写 as parent，SQL 会自动对齐第一行的列名。
+
+### 2. 结构映射 (Data Structure)
+SQL 表：存储的是一对对的 (parent, child) 连线。
+
+可视化：这些连线组成了右图的树状结构。
+
+Fillmore 指向 Abraham
+
+Abraham 指向 Barack
+
+结论：扁平的 SQL 表可以存储复杂的层级/递归数据结构。
+
