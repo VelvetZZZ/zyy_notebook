@@ -50,3 +50,9 @@ create table cities as
 在 SQL 中没有 if-else，我们通过 ** 集合拼接**来实现条件分类。
 
 目标：经度>=115 标记为 "west coast"，否则标记为 "other"。
+
+```SQL
+select "west coast" as region, name from cities where longitude >= 115
+union
+select "other"      as region, name from cities where longitude < 115;
+```
