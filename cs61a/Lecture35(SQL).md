@@ -68,4 +68,52 @@ select "west coast" as region。
 
 再筛选出不符合条件的子集。
 
-最后用 union 把两个子集合二为一
+最后用 union 把两个子集合二为一。
+
+
+
+
+# SQL Overview
+SQL 语言概览、核心语句与课程设定
+
+## I. 语言特性：标准与方言 (Standard vs. Variants)
+SQL (Structured Query Language) 的生态现状。
+
+### 1. 官方标准 (ANSI/ISO)
+* SQL 拥有一套国际通用的核心语法标准。
+* 这意味着诸如 `SELECT`, `WHERE` 等基础关键字在任何数据库中都是通用的。
+
+### 2. 实现差异 (Variants)
+* 不同的 **DBMS** (数据库管理系统，如 MySQL, PostgreSQL, Oracle) 都会在标准之上实现自己的“方言”或特性。
+* **CS61A 课程环境**：我们使用的是 **SQLite**。这是一个轻量级、无服务器的数据库引擎，它的某些语法特性与其他数据库可能略有不同。
+
+## II. 核心语句 (Statements)
+CS61A 侧重于数据的查询与转换，而非数据库运维。
+
+### 1. SELECT 语句 (重点)
+> *"A select statement creates a new table"*
+* **地位**：这是 SQL 中最重要的操作，占据了课程 90% 的内容。
+* **闭包性质 (Closure Property)**：
+    * `SELECT` 的输入是表，**输出结果也是一张表**。
+    * 这意味着查询结果可以被再次查询 (Sub-queries)。
+* **数据来源**：
+    1.  **From Scratch (凭空创造)**：直接定义数据生成表（如上一页的 `select 38 as...`）。
+    2.  **Projecting (投影/映射)**：从现有的表中筛选列或计算新值。
+
+### 2. CREATE TABLE 语句
+* **作用**：给一个表分配一个**全局名称 (Global Name)**。
+* **类比**：如果说 `SELECT ...` 是计算一个表达式的值，那么 `CREATE TABLE T AS SELECT ...` 就相当于编程语言中的变量赋值 (`T = ...`)，让数据持久化，供后续引用。
+
+### 3. 其他语句
+* 存在 `INSERT` (增), `UPDATE` (改), `DELETE` (删) 等操作，但不是本节课的重点。
+
+## III. 课程设定：Today's Theme
+PPT 下方的狗的照片不仅仅是装饰，它是接下来的核心数据集。
+
+### 1. The "Dogs" Dataset
+* 课程将引入一个关于“狗”的关联表 (Parents table)。
+* **学习目标**：通过查询狗的家族关系（祖父母、兄弟姐妹），练习 **Joins (表连接)** 和 **Recursion (递归查询)**。
+
+### 2. 解释器原理
+* 只要一张纸的代码量就能实现一个 `SELECT` 语句的解释器。这暗示了 SQL 声明式语法背后的实现逻辑其实非常优雅且精简。
+
