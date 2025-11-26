@@ -16,3 +16,13 @@ create table parents as
     select * from parents;
 
 --Projecting Tables 投影表
+
+create table parents as
+    select "abraham" as parent, "barack" as child union 
+    select "abraham",           "clinton"         union
+    select "delano",            "herbert"         union
+    select "fillmore",          "abraham"         union
+    select "fillmore",          "delano"          union
+    select "fillmore",          "grover"          union
+    select "eisenhower",        "fillmore";                   
+    select * from parents where parent = "abraham";
