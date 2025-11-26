@@ -25,4 +25,13 @@ create table parents as
     select "fillmore",          "delano"          union
     select "fillmore",          "grover"          union
     select "eisenhower",        "fillmore";                   
-    select * from parents where parent = "abraham";
+  
+  -- 1. 看看 Abraham 的孩子
+  select child from parents where parent = "abraham";
+
+  -- 2. 看看谁的名字比孩子大 (注意体会 fillmore 出现了几次)
+  select parent from parents where parent > child;
+
+  -- 3. 玩一下排序 (ORDER BY) - PPT 没写例子但提到了
+  -- 试着把所有孩子按字母倒序排列
+  select child from parents order by child desc;
