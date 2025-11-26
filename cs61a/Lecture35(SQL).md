@@ -202,3 +202,48 @@ create table parents as
 通过 CREATE TABLE，我们把那一长串 UNION 拼接出的逻辑结构，固化成了一张名为 parents 的物理表。
 
 后续复用：在接下来的课程中（Join, Recursion），我们可以直接写 select * from parents ...，而不需要每次都重新定义这一堆数据。
+
+
+# Select Statements Project Existing Tables
+SQL 查询核心语法与执行流
+
+## I. 查询语句的解剖学 (Anatomy)
+标准的 SQL 查询语句包含四个核心组件：
+
+```sql
+SELECT [columns]       -- 4. 投影 (Projection)
+FROM   [table]         -- 1. 数据源 (Input)
+WHERE  [condition]     -- 2. 过滤 (Filtering)
+ORDER BY [order];      -- 3. 排序 (Sorting)
+```
+### 关键组件解析
+1. FROM Clause: 指定从哪张表中获取数据。
+
+2. WHERE Clause: 筛选行 (Subset of rows)。只有满足条件的行会被保留，不满足的直接丢弃。
+
+3. ORDER BY Clause: 对剩余的行进行排序 (默认为升序 ASC，降序为 DESC)。
+
+4. SELECT Clause: 确定最终展示哪些列 (Column descriptions)。
+
+## II. 字符串比较 (String Comparison)
+在 SQL 中，不仅数字可以比大小，字符串也可以比大小。
+
+### 1. 比较规则：字典序 (Lexicographical Order)
+计算机比较字符串时，遵循ASCII 码或字母表顺序。
+
+A < B < ... < Z
+
+a < b < ... < z
+
+### 2. 实例分析
+PPT 中的例子：WHERE parent > child
+
+逻辑：筛选出那些“父母名字的首字母”排在“孩子名字的首字母”之后的行。
+
+数据验证 (基于 parents 表):
+
+"fillmore" > "abraham" ? -> True ('f' 在 'a' 后面) -> 保留
+
+"fillmore" > "delano" ? -> True ('f' 在 'd' 后面) -> 保留
+
+"fillmore" > "grover" ? -> False ('f' 在 'g' 前面) -> 丢弃
