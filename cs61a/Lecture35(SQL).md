@@ -247,3 +247,74 @@ PPT 中的例子：WHERE parent > child
 "fillmore" > "delano" ? -> True ('f' 在 'd' 后面) -> 保留
 
 "fillmore" > "grover" ? -> False ('f' 在 'g' 前面) -> 丢弃
+
+
+# SQL Arithmetic & Filtering
+利用算术表达式进行复杂的逻辑筛选
+
+## I. 问题背景
+给定一个表 `ints`，每一行代表一个数字，但被拆解成了四个分量（类似于二进制位权）：
+* `one`: 值为 0 或 1
+* `two`: 值为 0 或 2
+* `four`: 值为 0 或 4
+* `eight`: 值为 0 或 8
+
+**目标**：筛选出所有 **2 的幂 (Powers of 2)** 的单词（即 1, 2, 4, 8）。
+
+## II. 两种解题思维对比
+
+### 1. 枚举法 (Brute Force)
+最直观的想法是算出总和，然后检查总和是不是 1, 2, 4, 8。
+```sql
+SELECT word FROM ints 
+WHERE one + two + four + eight IN (1, 2, 4, 8);
+```
+### 2. 归一化法 (Normalization) - 你的解法
+利用除法将每一列的权重“归一化”为 0 或 1，然后检查总共有几个“1”。
+```SQL
+SELECT word FROM ints 
+WHERE one + two/2 + four/4 + eight/8 = 1;
+```
+#### 算法逻辑解析 (Trace)
+我们来手动模拟一下计算机是如何执行这个 WHERE 子句的：
+
+Case A: 当数字是 2 的幂 (比如 "four")
+
+数据：one=0, two=0, four=4, eight=0
+
+计算：
+
+one -> 0
+
+two / 2 -> 0 / 2 = 0
+
+four / 4 -> 4 / 4 = 1
+
+eight / 8 -> 0 / 8 = 0
+
+求和：0 + 0 + 1 + 0 = 1
+
+结果：等于 1，保留。
+
+Case B: 当数字不是 2 的幂 (比如 "three")
+
+数据：one=1, two=2, four=0, eight=0
+
+计算：
+
+one -> 1
+
+two / 2 -> 2 / 2 = 1
+
+four / 4 -> 0
+
+eight / 8 -> 0
+
+求和：1 + 1 + 0 + 0 = 2
+
+结果：不等于 1，丢弃。
+
+## III. 核心考点
+WHERE 子句中的运算：WHERE 后面不仅可以跟 > 或 =，还可以写复杂的数学表达式。SQL 会先算出表达式的值，再进行真假判断。
+
+整数特性：这个解法利用了表中数据的特殊性（列值要么是 0，要么是对应的位权值）。
