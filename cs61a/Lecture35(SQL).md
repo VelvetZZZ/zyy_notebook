@@ -157,3 +157,48 @@ Abraham 指向 Barack
 
 结论：扁平的 SQL 表可以存储复杂的层级/递归数据结构。
 
+
+# Naming Tables
+SQL 的持久化存储与变量赋值
+
+## I. 两种使用模式 (Modes of Usage)
+理解 SQL 执行结果的生命周期。
+
+### 1. 交互式 (Interactive)
+* **行为**：当你仅执行 `SELECT` 语句时，SQL 充当计算器或查询工具。
+* **结果**：数据被计算出来，展示在屏幕（标准输出）上，然后立即被**丢弃**。
+* **局限**：你无法在后续的查询中引用这次的结果。
+
+### 2. 持久化 (Stored)
+* **行为**：为了保存查询结果供后续使用，必须给结果集起一个**全局名称 (Global Name)**。
+* **语法**：
+    ```sql
+    create table [表名] as [select 语句];
+    ```
+
+## II. CS 视角的深度类比 (The Analogy)
+作为 CS 学生，用 Python 的概念来理解 SQL 会非常透彻。
+
+| 概念 | Python 代码 | SQL 代码 |
+| :--- | :--- | :--- |
+| **求值 (Evaluation)** | `3 + 5` <br> (算出 8，但不保存) | `select 3 + 5;` <br> (生成一行一列的表，不保存) |
+| **赋值 (Assignment)** | `x = 3 + 5` <br> (将结果绑定到变量名 x) | `create table x as select 3 + 5;` <br> (将结果绑定到表名 x) |
+
+> **核心洞察**：
+> 在 SQL 中，`CREATE TABLE table_name AS ...` 本质上就是**变量赋值**操作。被赋值的对象（右值）必须是一个表（由 `SELECT` 生成），赋给的变量（左值）就是表名。
+
+## III. 实践应用：Parents 表
+PPT 中的代码构建了本课程最重要的基础数据集。
+
+### 1. 代码结构
+```sql
+create table parents as
+  select "abraham" as parent, "barack" as child union
+  select "abraham",           "clinton"         union
+  ...
+  select "eisenhower",        "fillmore";
+```
+### 2. 意义
+通过 CREATE TABLE，我们把那一长串 UNION 拼接出的逻辑结构，固化成了一张名为 parents 的物理表。
+
+后续复用：在接下来的课程中（Join, Recursion），我们可以直接写 select * from parents ...，而不需要每次都重新定义这一堆数据。
