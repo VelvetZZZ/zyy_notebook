@@ -5,7 +5,7 @@ create table cities as
 
 select * from cities;
 
-create table parent as
+create table parents as
     select "abraham" as parent, "barack" as child union 
     select "abraham",           "clinton"         union
     select "delano",            "herbert"         union
@@ -13,4 +13,6 @@ create table parent as
     select "fillmore",          "delano"          union
     select "fillmore",          "grover"          union
     select "eisenhower",        "fillmore";                   
-    select * from parent;
+    select * from parents;
+
+--Projecting Tables 投影表
