@@ -35,3 +35,32 @@ create table parents as
   -- 3. 玩一下排序 (ORDER BY) - PPT 没写例子但提到了
   -- 试着把所有孩子按字母倒序排列
   select child from parents order by child desc;
+
+
+  -- Step 1: 准备数据 (构建 ints 表)
+-- 这一步模拟了二进制位：one=1, two=2, four=4, eight=8
+DROP TABLE IF EXISTS ints;
+
+CREATE TABLE ints AS
+  SELECT "zero" AS word, 0 AS one, 0 AS two, 0 AS four, 0 AS eight UNION
+  SELECT "one",          1,        0,        0,        0         UNION
+  SELECT "two",          0,        2,        0,        0         UNION
+  SELECT "three",        1,        2,        0,        0         UNION
+  SELECT "four",         0,        0,        4,        0         UNION
+  SELECT "five",         1,        0,        4,        0         UNION
+  SELECT "six",          0,        2,        4,        0         UNION
+  SELECT "seven",        1,        2,        4,        0         UNION
+  SELECT "eight",        0,        0,        0,        8         UNION
+  SELECT "nine",         1,        0,        0,        8;
+
+-- Step 2: 验证数据 (查看全表)
+SELECT * FROM ints;
+
+-- Step 3: 你的神仙解法 (Powers of 2)
+-- 逻辑：如果是 2 的幂，那么它只会在某一列上有值，且该值除以该列的权重等于 1。
+-- 所有的 "1" 加起来必须等于 1。
+SELECT word FROM ints 
+WHERE one + two/2 + four/4 + eight/8 = 1;
+
+-- 对比一下：普通人的解法 (枚举法)
+-- SELECT word FROM ints WHERE one + two + four + eight IN (1, 2, 4, 8);
