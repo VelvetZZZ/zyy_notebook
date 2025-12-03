@@ -50,3 +50,9 @@ and fur = "curly";      -- 3. 过滤：只保留卷毛狗
 
 - 场景 A (本题)：找卷毛狗的父母 ---->意味着孩子是卷毛 ----> where child = name。
 - 场景 B (反向)：找长毛狗的孩子 -----> 意味着父母是长毛 ------>where parent = name。
+
+
+
+
+
+# Aliases and Dot Expressions 别名与点表达式
