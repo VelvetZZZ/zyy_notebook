@@ -146,3 +146,53 @@ SELECT second, distance
 FROM distances 
 WHERE first = "Minneapolis" 
 ORDER BY distance;
+
+
+-- ==========================================
+-- 1. 基础字符串拼接 (Basic Concatenation)
+-- 对应 PPT 第一个红绿灯示例
+-- ==========================================
+
+-- 知识点：SQL 使用双竖线 || 进行拼接，而不是 +
+SELECT "hello," || " world" AS greeting;
+
+
+-- ==========================================
+-- 2. 复杂的字符串操作 (Complex Manipulation)
+-- 对应 PPT 中间部分：从 "hello, world" 中提取 "low"
+-- ==========================================
+
+-- 2.1 准备数据：创建 phrase 表
+DROP TABLE IF EXISTS phrase;
+CREATE TABLE phrase AS
+  SELECT "hello, world" AS s;
+
+-- 2.2 执行复杂查询
+-- 逻辑拆解：
+-- part1: substr(s, 4, 2) -> 从第4位('l')开始取2个 -> "lo"
+-- part2: instr(s, " ")   -> 找空格的位置 -> 7
+-- part3: substr(s, 7+1, 1) -> 从第8位('w')开始取1个 -> "w"
+-- result: "lo" || "w" -> "low"
+SELECT substr(s, 4, 2) || substr(s, instr(s, " ")+1, 1) AS result
+FROM phrase;
+
+
+-- ==========================================
+-- 3. 模拟列表解析 (List Parsing)
+-- 对应 PPT 底部示例：解析逗号分隔的字符串
+-- ==========================================
+
+-- 3.1 准备数据：模拟 Lisp 风格的列表结构
+-- car = "one" (第一个元素)
+-- cdr = "two,three,four" (剩余的元素)
+DROP TABLE IF EXISTS lists;
+CREATE TABLE lists AS
+  SELECT "one" AS car, "two,three,four" AS cdr;
+
+-- 3.2 提取 cdr 中的第一个元素 (即原本列表的第二个元素)
+-- 逻辑拆解：
+-- 1. instr(cdr, ",") -> 找到逗号在第 4 位
+-- 2. 4 - 1 = 3       -> 计算出单词 "two" 的长度
+-- 3. substr(..., 1, 3) -> 从头取 3 个字符 -> "two"
+SELECT substr(cdr, 1, instr(cdr, ",") - 1) AS cadr
+FROM lists;
