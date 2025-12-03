@@ -172,3 +172,79 @@ CREATE TABLE distances AS
   FROM cities AS a, cities AS b;
 ```
 - 解释：这将生成一个包含所有城市对之间距离的表（笛卡尔积）。如果 cities 有 $N$ 行，distances 将有 $N^2$ 行。
+
+#### AS的不同作用：
+| 位置       | 代码片段                     | 作用            | 含义                                           |
+|------------|------------------------------|-----------------|------------------------------------------------|
+| 在表名后   | `CREATE TABLE distances AS ...` | 定义来源        | “这个表的数据**来源于**后面的查询”              |
+| 在列名后   | `SELECT a.name AS first`       | 起外号 (Alias) | “把这一列在结果中**改名**叫 `first`”             |
+| 在 FROM 后 | `FROM cities AS a`             | 起外号 (Alias) | “把这张表在代码里**简称为** `a`”                 |
+
+
+
+# String Expressions (字符串处理)
+- 核心痛点：SQL 的字符串处理逻辑与 Python 完全不同，容易在索引和切片上踩坑。
+
+## I. 基础语法对照 (Python vs SQL)
+| 功能 (Function) | Python 写法 | SQL 写法 | 备注 |
+|----------------|-------------|----------|------|
+| 拼接 (Combine) | `"a" + "b"` | `"a" || "b"` | — |
+| 索引 (Indexing) | 从 0 开始 | 从 1 开始 | SQL 的第 1 个字符就是 index 1 |
+| 切片 (Slicing) | `[start:end]` | `substr(str, start, length)` | SQL 的第 3 个参数是**长度**，不是结束位置 |
+
+### II. 核心函数详解
+
+1. `substr(string, start, length)`
+- 含义：取子字符串 (Substring)。
+
+- 参数：
+    - string: 要操作的字符串。
+    - start: 起始位置（记得从 1 数起）。
+    - length: 要拿几个字符。
+
+2. `instr(string, substring)`
+- 含义：查找位置 (In-string)。
+
+- 功能：返回子字符串第一次出现的索引位置。
+
+- 示例：
+```SQL
+instr("hello, world", " ")
+-- 返回 7 (因为空格在第 7 位)
+```
+
+### III. 难点代码深度拆解 (The "low" Example)
+PPT 中展示了一个复杂的嵌套例子，用来得到单词 "low"。
+
+#### 原始代码：
+```SQL
+-- 假设表 phrase 中有一列 s 内容为 "hello, world"
+select substr(s, 4, 2) || substr(s, instr(s, " ")+1, 1) from phrase;
+```
+#### 逻辑推演步骤：
+1. 前半部分：`substr("hello, world", 4, 2)`
+- 数一数：h(1)-e(2)-l(3)-l(4)-o(5)...
+- 动作：从第 4 位开始，拿 2 个字符。
+- 结果："lo"
+
+2. 后半部分：
+- 先找位置：`instr("hello, world", " ")` -----> 找到空格在第 7 位。
+- 计算起点：7 + 1 = 8。第 8 位是字符 'w'。取字符：substr(..., 8, 1) ----> 从第 8 位开始，拿 1 个字符。
+- 结果："w"
+
+3. 最终拼接："lo" || "w" -----> "low"
+
+### IV. 进阶案例：解析列表 (List Parsing)
+PPT 的最后一个例子展示了如何手动解析类似 "one,two,three" 这样的字符串。
+
+```SQL
+-- 假设 cdr 为 "two,three,four"
+select substr(cdr, 1, instr(cdr, ",") - 1) ...
+```
+
+1. 逻辑拆解：
+- 目标：想取出第一个逗号前的单词（即 "two"）。
+- 找逗号：instr(cdr, ",") 发现逗号在第 4 位。算长度：逗号在第 4 位，说明前面的单词长度是 $4 - 1 = 3$。
+- 取值：substr(cdr, 1, 3)----->从头拿 3 个字------->"two"。
+
+⚠️ 教授的警告"Strings can be used to represent structured values, but doing so is rarely a good idea"含义：虽然 SQL 既然能硬解字符串，但千万别这么做！如果数据是列表，应该把它们拆分存到不同的行（Row）里，而不是塞在一个字符串里。
