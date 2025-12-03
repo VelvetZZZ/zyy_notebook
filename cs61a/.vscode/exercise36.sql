@@ -97,3 +97,52 @@ CREATE TABLE grandparents AS
 -- 看看 Eisenhower 的孙子辈是谁？
 SELECT grandpup FROM grandparents 
 WHERE grandog = "eisenhower";
+
+
+
+-- ==========================================
+
+-- ==========================================
+-- 1. 创建城市表 (Cities Table)
+-- 数据来源：Slide example
+-- ==========================================
+DROP TABLE IF EXISTS cities;
+CREATE TABLE cities AS
+  SELECT 38 AS latitude, 122 AS longitude, "Berkeley"    AS name UNION
+  SELECT 42,             71,               "Cambridge"           UNION
+  SELECT 45,             93,               "Minneapolis"         UNION
+  SELECT 33,             117,              "San Diego"           UNION
+  SELECT 26,             80,               "Miami"               UNION
+  SELECT 90,             0,                "North Pole";
+
+-- ==========================================
+-- 2. 简单的数值筛选示例 (Cold Cities)
+-- 对应 PPT 右侧中间的小例子
+-- ==========================================
+DROP TABLE IF EXISTS cold;
+CREATE TABLE cold AS
+  SELECT name FROM cities WHERE latitude >= 43;
+
+-- 查看寒冷城市
+SELECT * FROM cold;
+
+-- ==========================================
+-- 3. 计算距离表 (Distances Table)
+-- 核心：自连接 + 数学运算
+-- 60 * (lat_b - lat_a) 粗略模拟纬度距离
+-- ==========================================
+DROP TABLE IF EXISTS distances;
+CREATE TABLE distances AS
+  SELECT a.name AS first, b.name AS second,
+         60 * (b.latitude - a.latitude) AS distance
+  FROM cities AS a, cities AS b;
+
+-- ==========================================
+-- 4. 验证测试
+-- 对应 PPT 左侧终端的查询：
+-- "以 Minneapolis 为起点，去往其他城市的距离，按距离排序"
+-- ==========================================
+SELECT second, distance 
+FROM distances 
+WHERE first = "Minneapolis" 
+ORDER BY distance;
