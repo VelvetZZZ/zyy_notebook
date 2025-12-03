@@ -76,3 +76,21 @@ FROM parents AS a, parents AS b
 2. 点表达式 (Dot Expressions)：现在我们用 a.child 指代表 A 里的孩子，用 b.child 指代表 B 里的孩子，从而消除歧义 (Disambiguate)。
 
 ### II. 案例分析 1：寻找兄弟姐妹 (Siblings)
+- 目标：找出所有拥有同一个父母的孩子对 (Pairs of siblings)。
+
+#### 1. 逻辑拆解
+- 数据源：两份 parents 表 (a 和 b)。
+- 条件 A (同一父母)：a.parent 必须等于 b.parent。
+- 条件 B (去重与排序)：这是一个经典考点。
+    - 如果只写 !=，会出现 (Barack, Clinton) 和 (Clinton, Barack) 这种重复数据。
+    - 使用 < (字母序小于) 可以强行规定顺序，既避免了自己连自己，也避免了重复配对。
+
+#### 2. 代码实现
+```SQL
+SELECT a.child AS first, b.child AS second
+FROM parents AS a, parents AS b
+WHERE a.parent = b.parent  -- 核心：拥有相同的父母
+    AND a.child < b.child; -- 技巧：利用字母序去重，并排除自己
+```
+#### 运行结果示例：
+ | First | Second | 说明 | | :--- | :--- | :--- | | barack | clinton | 都是 abraham 的孩子，且 'b' < 'c' | | abraham | delano | 都是 fillmore 的孩子 |
