@@ -48,3 +48,52 @@ WHERE child = name AND fur = "curly";
 SELECT parent 
 FROM parents, dogs 
 WHERE child = name AND fur = "curly";
+
+
+
+
+
+
+-- ==========================================
+-- 1. 准备基础数据 (Data Setup)
+-- ==========================================
+
+DROP TABLE IF EXISTS dogs;
+CREATE TABLE dogs AS
+  SELECT "abraham" AS name, "long" AS fur UNION
+  SELECT "barack",          "short"       UNION
+  SELECT "clinton",         "long"        UNION
+  SELECT "delano",          "long"        UNION
+  SELECT "eisenhower",      "short"       UNION
+  SELECT "fillmore",        "curly"       UNION
+  SELECT "grover",          "short"       UNION
+  SELECT "herbert",         "curly";
+
+DROP TABLE IF EXISTS parents;
+CREATE TABLE parents AS
+  SELECT "abraham" AS parent, "barack" AS child UNION
+  SELECT "abraham",           "clinton"         UNION
+  SELECT "delano",            "herbert"         UNION
+  SELECT "fillmore",          "abraham"         UNION
+  SELECT "fillmore",          "delano"          UNION
+  SELECT "fillmore",          "grover"          UNION
+  SELECT "eisenhower",        "fillmore";
+
+-- ==========================================
+-- 2. 创建祖父母表 (Grandparents Creation)
+-- ==========================================
+
+DROP TABLE IF EXISTS grandparents;
+CREATE TABLE grandparents AS
+  SELECT a.parent AS grandog, b.child AS grandpup
+  FROM parents AS a, parents AS b
+  WHERE a.child = b.parent;
+
+-- ==========================================
+-- 3. 测试验证 (Verification)
+-- 对应截图 image_0e96d9.jpg 中的查询
+-- ==========================================
+
+-- 看看 Eisenhower 的孙子辈是谁？
+SELECT grandpup FROM grandparents 
+WHERE grandog = "eisenhower";
