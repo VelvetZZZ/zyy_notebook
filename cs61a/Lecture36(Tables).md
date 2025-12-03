@@ -126,3 +126,24 @@ WHERE a.child = b.parent;      -- 核心桥梁：爸爸是爷爷的孩子，同�
     - 找兄弟 (平级)：WHERE a.parent = b.parent (共用上级)
 
     - 找祖孙 (层级)：WHERE a.child = b.parent (链式传递)
+
+
+# I. 数值表达式 (Numerical Expressions)
+## 1. 基本能力
+SQL 表达式不仅可以引用列名，还可以包含函数调用和算术运算符。
+- 语法结构：
+```SQL
+SELECT [expression] AS [name], [expression] AS [name] ...
+```
+## 2. 常用操作符
+算术 (Arithmetic): `+, -, *, /, % (取模), and, or
+
+数学函数 (Functions): abs (绝对值), round (四舍五入)
+
+比较 (Comparison):
+
+<, <=, >, >=
+
+<> 或 != (不等于)
+
+= (等于) : ⚠️ 注意：SQL 中没有变量赋值的概念，所以单等号 = 专门用于判断相等，不使用 ==。
