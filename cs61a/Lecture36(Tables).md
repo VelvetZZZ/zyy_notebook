@@ -56,3 +56,23 @@ and fur = "curly";      -- 3. 过滤：只保留卷毛狗
 
 
 # Aliases and Dot Expressions 别名与点表达式
+## Self-Joins (自连接)
+*Declarative Programming (SQL) 核心挑战*：当我们需要找出同一张表内部实体之间的关系（如：兄弟姐妹、祖孙）时，普通的单表查询无法满足需求。
+
+### I. 核心概念：别名与克隆 (Aliases)
+
+#### 1. 为什么需要自连接？
+有时我们需要比较同一张表中的两行数据。
+    例如，为了找到“兄弟姐妹”，我们需要比较两个孩子及其父母，而这些信息都存储在同一张 parents 表中。
+
+#### 2. 语法：创建“分身”
+既然 SQL 不知道如何区分“第一次用这张表”和“第二次用这张表”，我们需要使用**AS**关键字给它们起别名。
+
+```SQL
+FROM parents AS a, parents AS b
+```
+1. 含义：想象我们把 parents 表复印了两份，一份贴上标签 A，另一份贴上标签 B。
+
+2. 点表达式 (Dot Expressions)：现在我们用 a.child 指代表 A 里的孩子，用 b.child 指代表 B 里的孩子，从而消除歧义 (Disambiguate)。
+
+### II. 案例分析 1：寻找兄弟姐妹 (Siblings)
