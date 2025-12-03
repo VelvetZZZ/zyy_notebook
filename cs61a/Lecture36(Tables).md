@@ -136,14 +136,39 @@ SQL 表达式不仅可以引用列名，还可以包含函数调用和算术运�
 SELECT [expression] AS [name], [expression] AS [name] ...
 ```
 ## 2. 常用操作符
-算术 (Arithmetic): `+, -, *, /, % (取模), and, or
+- 算术 (Arithmetic): `+, -, *, /, % (取模), and, or`
 
-数学函数 (Functions): abs (绝对值), round (四舍五入)
+- 数学函数 (Functions): `abs (绝对值), round (四舍五入)`
 
-比较 (Comparison):
+- 比较 (Comparison):
 
-<, <=, >, >=
+`<, <=, >, >=`
 
-<> 或 != (不等于)
+`<> 或 != (不等于)`
 
-= (等于) : ⚠️ 注意：SQL 中没有变量赋值的概念，所以单等号 = 专门用于判断相等，不使用 ==。
+`= (等于) `: ⚠️ 注意：SQL 中没有变量赋值的概念，所以单等号 = 专门用于判断相等，不使用 ==。
+
+## II. 实战案例：计算距离 (Distances)
+- 目标：基于经纬度数据，计算两个城市之间的纬度距离。
+
+### 1. 数据源：`cities 表`
+包含城市名称及其地理坐标。
+```SQL
+CREATE TABLE cities AS
+  SELECT 38 AS latitude, 122 AS longitude, "Berkeley" AS name UNION
+  SELECT 42,             71,               "Cambridge"      UNION
+  SELECT 45,             93,               "Minneapolis"    UNION
+  ...;
+```
+
+### 2. 计算逻辑：distances 表
+利用**自连接 (Self-Join)** 和 **数值运算**。
+- 公式：$Distance = 60 \times (Lat_2 - Lat_1)$
+- 代码逻辑：
+```SQL
+CREATE TABLE distances AS
+  SELECT a.name AS first, b.name AS second,
+         60 * (b.latitude - a.latitude) AS distance
+  FROM cities AS a, cities AS b;
+```
+- 解释：这将生成一个包含所有城市对之间距离的表（笛卡尔积）。如果 cities 有 $N$ 行，distances 将有 $N^2$ 行。
