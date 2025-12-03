@@ -107,3 +107,22 @@ WHERE a.parent = b.parent  -- 核心：拥有相同的父母
 - 第二棒 (表 b)：证明 Y 是 Z 的父母。
 
 - 交接点：表 a 的“孩子”必须是表 b 的“父母”。
+
+### 2. 代码实现
+```SQL
+SELECT a.parent AS grandog,    -- 爷爷 (第一代的父母)
+       b.child AS grandpup     -- 孙子 (第二代的孩子)
+FROM parents AS a, parents AS b
+WHERE a.child = b.parent;      -- 核心桥梁：爸爸是爷爷的孩子，同时也是孙子的爸爸
+```
+
+## 学习心得 / 复习要点
+1. 自连接本质：就是 JOIN 操作的一种特殊情况，只是左表和右表是同一个。
+
+2. a.child < b.child 的妙用：在处理“成对组合”问题时，永远记住用<来避免重复和自匹配。
+
+3. 连接方向：
+
+    - 找兄弟 (平级)：WHERE a.parent = b.parent (共用上级)
+
+    - 找祖孙 (层级)：WHERE a.child = b.parent (链式传递)
