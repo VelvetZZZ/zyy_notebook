@@ -94,3 +94,16 @@ WHERE a.parent = b.parent  -- 核心：拥有相同的父母
 ```
 #### 运行结果示例：
  | First | Second | 说明 | | :--- | :--- | :--- | | barack | clinton | 都是 abraham 的孩子，且 'b' < 'c' | | abraham | delano | 都是 fillmore 的孩子 |
+
+## III. 案例分析 2：寻找祖父母 (Grandparents)
+
+- 目标：找出祖孙三代关系 (Grandparents -> Grandchildren)。
+
+### 1. 逻辑拆解 (接力赛模型)
+这是多步关系的典型应用。
+
+- 第一棒 (表 a)：证明 X 是 Y 的父母。
+
+- 第二棒 (表 b)：证明 Y 是 Z 的父母。
+
+- 交接点：表 a 的“孩子”必须是表 b 的“父母”。
