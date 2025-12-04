@@ -98,3 +98,12 @@ SELECT legs, max(weight) FROM animals GROUP BY legs;
 -- 4 | 3 (因为有3只四条腿的)
 -- 2 | 3 (因为有3只两条腿的)
 SELECT legs, count(*) FROM animals GROUP BY legs;
+-- 挑战题: 按腿的数量和重量分组，列出每组的腿和重量
+-- 预期结果:
+-- 4 | 20
+-- 4 | 10
+-- 2 | 6
+-- 2 | 10
+-- 2 | 12000
+
+SELECT legs,weight FROM animals GROUP BY legs,weight;

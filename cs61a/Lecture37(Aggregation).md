@@ -108,4 +108,51 @@ GROUP BY [expression];
 3. 组内聚合 (Aggregate per Group):
 在` 4-legs` 组 中计算 `max(weight)` ----> 20。在`2-legs`组 中计算`max(weight)`-----> 12000。
 - 输出结果:
-| legs | max(weight) || :--- | :--- || 4 | 20 || 2 | 12000 |
+| legs | max(weight) | | :--- | :--- | | 4 | 20 | | 2 | 12000 |
+
+## III. 关键规则
+- 行数决定因素：结果表的**行数**等于 `GROUP BY` 表达式中唯一值 (Unique Values) 的数量。
+
+- 列的选择：在 `SELECT` 中，除了聚合函数外，通常只能放被用来分组的那一列（例如这里的 legs）。如果放了其他列（如 kind），可能会导致上一页提到的“模棱两可”问题。
+
+
+
+# Selecting Groups (HAVING 子句)
+
+- 核心概念：`HAVING`子句用于**过滤分组后的数据集**，它通常与聚合函数（如 count, sum, max）配合使用。
+
+## I. 语法结构
+
+```SQL
+SELECT [columns] 
+FROM [table] 
+GROUP BY [expression] 
+HAVING [expression]; -- 注意：HAVING 在 GROUP BY 之后
+```
+
+## II. 执行逻辑四步走
+
+- 以 `SELECT weight/legs, count(*) ... GROUP BY weight/legs HAVING count(*)>1`为例：
+
+
+1. `Calculate`: 计算分组键值 (如 weight/legs)。
+
+- 注意：SQLite 整数除法 10/4 = 2。
+
+2. `Group`: 将具有相同键值的行归并到同一个“桶”中。
+    - Group 5: {Dog, Penguin}
+    - Group 2: {Cat, Ferret}
+    - Group 3: {Parrot}
+    - Group 6000: {T-Rex}
+
+3. `Aggregate`: 计算每个组的统计信息。
+    - Group 5 count: 2
+    - Group 3 count: 1 ...
+
+4. `Filter (HAVING)`: 剔除不满足条件的组。
+    - 条件 count(*) > 1 剔除了 Parrot 和 T-Rex 组。
+
+## III. 关键区别：WHERE vs HAVING
+`WHERE`: 过滤原始数据行 (Filters the set of rows before aggregation).
+
+`HAVING`: 过滤聚合后的组 (Filters the set of groups that are aggregated).
