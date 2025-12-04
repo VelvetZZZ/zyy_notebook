@@ -15,3 +15,22 @@ create table animals as
 ```
 
 ## 2. 核心操作演示
+- 聚合函数不仅仅是查看数据，而是对一列数据进行数学统计。 例如，找出所有动物中“腿最多”的数量：
+
+```SQL
+-- 计算 legs 列的最大值
+select max(legs) from animals;
+
+-- 输出结果: 4
+```
+
+## 3. 常用函数扩展
+除了求最大值 (max)，字幕中还提到了其他几种最常用的聚合操作，它们都可以对整列数据进行“降维打击”：
+
+- max(column): 求最大值 (Maximum)。
+
+- min(column): 求最小值 (Minimum)。
+
+- sum(column): 求总和 (Summation)。
+
+- count(*): 统计行数 (Count rows)。
