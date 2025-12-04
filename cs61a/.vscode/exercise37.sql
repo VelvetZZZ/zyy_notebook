@@ -9,7 +9,7 @@ CREATE TABLE animals AS
   SELECT "t-rex"      , 2        , 12000;
 
 -- 2. PPT 上的例子：谁的腿最多？(Max)
--- 预期结果: 4
+-- 预期结果: 
 SELECT max(legs) FROM animals;
 
 -- 3. 玩点新的：所有动物加起来有多重？(Sum)
