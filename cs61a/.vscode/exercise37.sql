@@ -72,3 +72,29 @@ SELECT avg(weight), kind FROM animals;
 
 -- Test 4: 无意义 (最轻的动物是谁？) -> 预期: 这里的 kind 是随机且无意义的
 SELECT min(kind), legs, wight FROM animals;
+
+
+
+
+
+-- 1. 准备数据 (如果之前删了的话)
+DROP TABLE IF EXISTS animals;
+CREATE TABLE animals AS
+  SELECT "dog" AS kind, 4 AS legs, 20 AS weight UNION
+  SELECT "cat"        , 4        , 10           UNION
+  SELECT "ferret"     , 4        , 10           UNION
+  SELECT "parrot"     , 2        , 6            UNION
+  SELECT "penguin"    , 2        , 10           UNION
+  SELECT "t-rex"      , 2        , 12000;
+
+-- Test: 按腿的数量分组，找出每组最重的
+-- 预期结果: 
+-- 4 | 20
+-- 2 | 12000
+SELECT legs, max(weight) FROM animals GROUP BY legs;
+
+-- 挑战题: 按腿的数量分组，算出每组有几只动物？(Count)
+-- 预期结果: 
+-- 4 | 3 (因为有3只四条腿的)
+-- 2 | 3 (因为有3只两条腿的)
+SELECT legs, count(*) FROM animals GROUP BY legs;
