@@ -48,3 +48,24 @@ SELECT count(distinct legs) FROM animals;
 -- 11. 计算不同重量的总和
 -- 预期结果: 12146
 SELECT sum(distinct weight) FROM animals;
+
+
+
+-- 1. 准备数据
+DROP TABLE IF EXISTS animals;
+CREATE TABLE animals AS
+  SELECT "dog" AS kind, 4 AS legs, 20 AS weight UNION
+  SELECT "cat"        , 4        , 10           UNION
+  SELECT "ferret"     , 4        , 10           UNION
+  SELECT "parrot"     , 2        , 6            UNION
+  SELECT "penguin"    , 2        , 10           UNION
+  SELECT "t-rex"      , 2        , 12000;
+
+-- Test 1: 有意义 (谁最重？) -> 预期: t-rex
+SELECT max(weight), kind FROM animals;
+
+-- Test 2: 模棱两可 (谁腿最多？) -> 预期: dog (因为它是第一个由4条腿的)
+SELECT max(legs), kind FROM animals;
+
+-- Test 3: 无意义 (平均体重的代表是谁？) -> 预期: 这里的 kind 是随机且无意义的
+SELECT avg(weight), kind FROM animals;

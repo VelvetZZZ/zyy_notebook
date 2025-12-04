@@ -34,3 +34,52 @@ select max(legs) from animals;
 - sum(column): 求总和 (Summation)。
 
 - count(*): 统计行数 (Count rows)。
+
+
+
+
+
+# Mixing Aggregates (混合查询)
+ > 核心问题：当我们把“聚合函数”（如 max）和“普通列”（如 kind）放在同一个 SELECT 语句中时，数据库是如何决定显示哪一行数据的？
+
+## I. 机制原理
+
+- 在 SQLite 中，如果聚合函数（如 max 或 min）能够锁定特定的某一行，那么随后的普通列就会显示那一行的数据。
+    > "An aggregate function also selects a row in the table, which may be meaningful."
+
+## II. 三种结果分类
+
+### 1. 有意义的结果 (Meaningful) ✅
+当极值（最大/最小）在表中是唯一的时候，查询结果非常准确。
+- 代码：select max(weight), kind ...
+
+- 逻辑：只有 T-Rex 是 12000。
+
+- 结果：12000 | "t-rex"
+
+- 解读：最重的动物就是霸王龙。
+
+### 2. 模棱两可的结果 (Ambiguous) ⚠️
+当极值由多行共享时，结果具有随机性。
+- 代码：select max(legs), kind ...
+
+- 逻辑：Dog, Cat, Ferret 都是 4 条腿。
+
+- 结果：4 | "dog" (SQLite 通常返回遇到的第一行)。
+
+- 解读：虽然找到了最多的腿数，但显示的动物只是“拥有 4 条腿的动物之一”，不代表全部。
+
+### 3. 无意义的结果 (Meaningful Value? No.) ❌
+当聚合函数计算的是一个不存在于原表中的数值（如平均值）时。
+- 代码：select avg(weight), kind ...
+
+- 逻辑：平均值是一个虚拟数字，没有任何一只动物对应这个体重。
+
+- 结果：2009.33 | "dog" (完全随机的行)。
+
+- 解读：这里的 kind 是没有任何参考价值的噪音数据。
+
+### 避坑指南
+如果你用 MAX 或 MIN，通常是想找“那个最大/最小的是谁”，这通常没问题（只要考虑平局情况）。
+
+如果你用**SUM 或 AVG（平均）**，千万不要在后面加**普通列名（如 name 或 kind）**，因为那个结果是毫无逻辑的。
