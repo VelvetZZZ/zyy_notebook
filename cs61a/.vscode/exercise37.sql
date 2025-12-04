@@ -45,3 +45,6 @@ SELECT count(*) FROM animals;
 -- 10. 计算不同腿数的种类数
 -- 预期结果: 2
 SELECT count(distinct legs) FROM animals;
+-- 11. 计算不同重量的总和
+-- 预期结果: 12146
+SELECT sum(distinct weight) FROM animals;
