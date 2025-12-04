@@ -17,5 +17,5 @@ SELECT max(legs) FROM animals;
 SELECT sum(weight) FROM animals;
 
 -- 4. 玩点新的：这里面有几只动物？(Count)
--- 预期结果: 
+-- 预期结果: 6
 SELECT count(*) FROM animals;
