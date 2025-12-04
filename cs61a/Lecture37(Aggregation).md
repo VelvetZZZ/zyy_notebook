@@ -83,3 +83,29 @@ select max(legs) from animals;
 如果你用 MAX 或 MIN，通常是想找“那个最大/最小的是谁”，这通常没问题（只要考虑平局情况）。
 
 如果你用**SUM 或 AVG（平均）**，千万不要在后面加**普通列名（如 name 或 kind）**，因为那个结果是毫无逻辑的。
+
+
+
+# Grouping Rows (分组聚合)
+ > 核心逻辑：将数据表按特定特征“分桶”，然后在每个桶内部独立进行聚合计算。
+
+## I. 语法结构
+```SQL
+SELECT [column], [aggregate_function]
+FROM [table]
+GROUP BY [expression];
+```
+## II. 执行流程 (Visual Walkthrough)
+
+- 以 `SELECT legs, max(weight) FROM animals GROUP BY legs;` 为例
+1. 识别组 (Identify Groups):
+- SQL 扫描`GROUP BY`指定的`legs`列。发现两个唯一值 (Unique Values)：4 和 2。
+
+2. 分桶 (Group Rows):
+- 所有`legs=4`的行被归为一组`(Dog, Cat, Ferret)`。
+- 所有`legs=2`的行被归为一组 `(Parrot, Penguin, T-Rex)`。
+
+3. 组内聚合 (Aggregate per Group):
+在` 4-legs` 组 中计算 `max(weight)` ----> 20。在`2-legs`组 中计算`max(weight)`-----> 12000。
+- 输出结果:
+| legs | max(weight) || :--- | :--- || 4 | 20 || 2 | 12000 |
