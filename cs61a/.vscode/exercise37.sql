@@ -42,3 +42,6 @@ SELECT count(kind) FROM animals
 -- 预期结果: 6
 SELECT count(*) FROM animals;
 
+-- 10. 计算不同腿数的种类数
+-- 预期结果: 2
+SELECT count(distinct legs) FROM animals;
