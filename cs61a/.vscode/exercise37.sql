@@ -69,3 +69,6 @@ SELECT max(legs), kind FROM animals;
 
 -- Test 3: 无意义 (平均体重的代表是谁？) -> 预期: 这里的 kind 是随机且无意义的
 SELECT avg(weight), kind FROM animals;
+
+-- Test 4: 无意义 (最轻的动物是谁？) -> 预期: 这里的 kind 是随机且无意义的
+SELECT min(kind), legs, wight FROM animals;
