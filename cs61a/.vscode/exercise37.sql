@@ -19,3 +19,16 @@ SELECT sum(weight) FROM animals;
 -- 4. 玩点新的：这里面有几只动物？(Count)
 -- 预期结果: 6
 SELECT count(*) FROM animals;
+
+-- 5. 综合练习：腿最多的动物和最轻的动物的差值是多少？(Max - Min)
+-- 预期结果: -6
+SELECT max(legs) - min(weight) FROM animals;
+
+
+-- 6. 综合练习：除了霸王龙以外，腿最少的动物有几条腿？(Min with WHERE)
+-- 预期结果: 2
+SELECT min(legs), max(weight) FROM animals
+WHERE kind <> "t-rex";
+
+
+
