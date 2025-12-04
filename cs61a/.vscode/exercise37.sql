@@ -30,5 +30,15 @@ SELECT max(legs) - min(weight) FROM animals;
 SELECT min(legs), max(weight) FROM animals
 WHERE kind <> "t-rex";
 
+-- 7. 额外练习题目：平均每只动物有多少条腿？(Avg)
+-- 预期结果: 3.0
+SELECT avg(legs) FROM animals;
 
+-- 8. 额外练习题目：动物种类有多少种？(Count Distinct)
+-- 预期结果: 6
+SELECT count(kind) FROM animals
+
+-- 9. 计算行数
+-- 预期结果: 6
+SELECT count(*) FROM animals;
 
