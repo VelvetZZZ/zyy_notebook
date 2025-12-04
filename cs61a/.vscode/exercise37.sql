@@ -107,3 +107,29 @@ SELECT legs, count(*) FROM animals GROUP BY legs;
 -- 2 | 12000
 
 SELECT legs,weight FROM animals GROUP BY legs,weight;
+
+
+
+
+-- 1. 准备数据
+DROP TABLE IF EXISTS animals;
+CREATE TABLE animals AS
+  SELECT "dog" AS kind, 4 AS legs, 20 AS weight UNION
+  SELECT "cat"        , 4        , 10           UNION
+  SELECT "ferret"     , 4        , 10           UNION
+  SELECT "parrot"     , 2        , 6            UNION
+  SELECT "penguin"    , 2        , 10           UNION
+  SELECT "t-rex"      , 2        , 12000;
+
+-- Test 1: 不加 HAVING (查看所有分组)
+-- 预期结果: 会显示 4 行 (包括 count=1 的组)
+SELECT weight/legs, count(*) 
+FROM animals 
+GROUP BY weight/legs;
+
+-- Test 2: 加上 HAVING (只看成员数 > 1 的组)
+-- 预期结果: 只剩下 2 行 (5和2)
+SELECT weight/legs, count(*) 
+FROM animals 
+GROUP BY weight/legs 
+HAVING count(*) > 1;
