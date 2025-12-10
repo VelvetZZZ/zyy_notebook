@@ -158,3 +158,50 @@ INSERT INTO t(column) VALUES (value);
 INSERT INTO t VALUES (value0, value1);
 ```
 *  *关键点*： 如果你没有指定列名列表，VALUES 中的值将按照表定义的列顺序依次插入。
+
+
+# `UPDATE` 语句学习笔记
+
+`UPDATE` 语句用于修改数据库表中 **现有行** 的**现有数据**。它只会更改表中部分行的部分列。
+
+> *定义*： Update sets all entries in certain columns to new values, just for some subset of rows.（UPDATE 为某些列设置新值，但仅针对行的子集。）
+
+## A. 语法结构 (基于 Railroad Diagram)
+`UPDATE` 语句的基本结构是：
+
+```sql
+UPDATE [OR resolution] qualified-table-name SET column-name = expr, ... [WHERE expr];
+```
+
+## B. 语法组成部分详解
+![alt text](image-5.png)
+
+### 1. 冲突处理子句 (`OR resolution`)
+与 `INSERT` 类似，`UPDATE` 后面可以接 `OR` 加上一个冲突解决动作，用于处理更新操作违反数据库约束（如 `PRIMARY KEY` 或 `UNIQUE`）时的情况。
+
+| 关键字 (Keyword) | 冲突处理行为 (Conflict Behavior) |
+|------------------|----------------------------------|
+| OR ROLLBACK      | 遇到冲突时，**回滚** 整个事务。 |
+| OR ABORT         | 中止当前 SQL 语句，并回滚该语句所做的更改（**默认行为**）。 |
+| OR REPLACE       | 如果发生冲突，**删除** 导致冲突的现有行，然后 **替换** 为更新后的行。 |
+| OR FAIL          | 中止当前 SQL 语句，但 **不回滚** 事务中该语句之前的更改。 |
+| OR IGNORE        | 遇到冲突时，**忽略** 该行数据，跳过该行的更新。 |
+
+### 2. `qualified-table-name`(表名)
+指定要更新数据的表名。
+
+### 3. SET 子句
+这是 `UPDATE` 的核心部分，用于指定要更新的列及其新值。
+
+`SET` 后面跟一个或多个逗号分隔的赋值表达式：`column-name = expr`。
+
+`expr` 可以是**常量、计算结果或子查询**。
+
+### 4. WHERE 子句 (可选但常用)
+用于指定哪些行应该被更新。
+
+`WHERE` 后面跟一个表达式 (expr)，只有满足该表达式（即表达式结果为 TRUE）的行才会被修改。
+
+重要： 如果省略 WHERE 子句，**表中的所有行都会被更新！**
+
+
