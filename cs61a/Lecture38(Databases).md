@@ -56,3 +56,23 @@ CREATE [TEMP] TABLE [IF NOT EXISTS] table-name (
 ```sql
 CREATE TABLE numbers (n, note);
 ```
+*含义*：创建一个名为 numbers 的表，包含 n 和 note 两列。
+
+### 示例 2: 添加 UNIQUE (唯一) 约束
+
+```sql
+CREATE TABLE numbers (n UNIQUE, note);
+```
+*含义*：n 这一列的值必须是唯一的。如果尝试插入重复的 n 值，数据库会报错。
+
+### 示例 3: 添加 DEFAULT (默认值)
+```sql
+CREATE TABLE numbers (n, note DEFAULT "No comment");
+```
+*含义*：
+
+如果你插入时指定了 note：VALUES(1, "Hello") -> note 为 "Hello"
+
+如果你插入时忽略了 note：VALUES(1) -> note 自动填为 "No comment"
+
+**补充：使用 CREATE TABLE 只是造出了一个空的容器（Empty Table）。**
