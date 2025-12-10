@@ -107,3 +107,54 @@ DROP TABLE IF EXISTS numbers;
 - 如果不存在 -> 忽略该命令，不报错。
 
 *优势*：这种写法被称为“幂等性”操作，无论运行多少次，结果都是安全的，不会导致程序崩溃。
+
+# SQL `INSERT` 语句学习笔记
+
+## I. INSERT 语句概述
+`INSERT` 语句用于向数据库的 表 中添加新的 行（记录）。
+
+## II. 语法结构与选项 (基于 Railroad Diagram)
+
+`INSERT` 语句的基本结构是 :
+**`INSERT [OR resolution] INTO table_name ...。`**
+
+### A. 冲突处理子句 (OR resolution)
+- 在 INSERT 之后可以指定 OR 关键字，以及一个冲突解决动作，用于处理插入操作违反数据库约束（如 PRIMARY KEY 或 UNIQUE）时的情况。
+
+| 动作 (Action) | 描述 (Description) |
+|--------------|---------------------|
+| OR REPLACE   | 如果发生冲突，删除导致冲突的现有行，然后插入新行。 |
+| OR ROLLBACK  | 遇到冲突时，回滚整个事务（中止并撤销所有更改）。 |
+| OR ABORT     | 遇到冲突时，中止当前 SQL 语句（默认行为），并回滚该语句所做的更改。 |
+| OR FAIL      | 遇到冲突时，中止当前 SQL 语句，但不回滚事务中该语句之前的更改。 |
+| OR IGNORE    | 遇到冲突时，忽略该行数据，继续处理后续的插入操作。 |
+
+### B. 目标和数据源
+*目标*： `INTO` 后面跟 `table-name`（表名），以及可选的 `(column-name, ...)` 列名列表。
+
+*数据源*：
+
+`VALUES`: 插入明确指定的值列表。
+
+`select-stmt`: 使用 SELECT 语句的结果集作为要插入的数据。
+
+`DEFAULT VALUES`: 插入一行，所有列都使用其定义的默认值（或 NULL）。
+
+### III. 常见用法示例
+
+假设有一个表 `t` 包含两列数据，以下是两种基本的插入方法：
+
+#### A. 插入到指定列
+
+只为表 `t` 中的 `特定列` 插入数据。未指定的列将使用`默认值`或`NULL`。
+
+```sql
+INSERT INTO t(column) VALUES (value);
+```
+#### B. 插入到所有列
+为表 `t` 中的 `所有列` 依次提供数据。值的数量必须与表的列数一致。
+
+```sql
+INSERT INTO t VALUES (value0, value1);
+```
+*  *关键点*： 如果你没有指定列名列表，VALUES 中的值将按照表定义的列顺序依次插入。
