@@ -76,3 +76,34 @@ CREATE TABLE numbers (n, note DEFAULT "No comment");
 如果你插入时忽略了 note：VALUES(1) -> note 自动填为 "No comment"
 
 **补充：使用 CREATE TABLE 只是造出了一个空的容器（Empty Table）。**
+
+# Drop Table 
+
+## 1. 核心功能
+`DROP TABLE` 用于从数据库中**彻底删除**一张表。
+* **注意**：这是一个破坏性操作，表结构和表内的所有数据都会被永久移除。
+
+## 2. 语法结构与安全机制
+
+语法图路径：`DROP` -> `TABLE` -> `[IF EXISTS]` -> `表名`
+
+### 2.1 两种写法的区别
+
+#### 写法 A：强制删除 (不推荐在脚本中使用)
+```sql
+DROP TABLE numbers;
+```
+*逻辑*：命令数据库直接删除 numbers 表。
+
+*风险*：如果 numbers 表根本不存在，SQL 会报错 (Error)，导致程序中断。
+
+#### 写法 B：安全删除 (推荐)
+```sql
+DROP TABLE IF EXISTS numbers;
+```
+*逻辑*：
+- 先检查 numbers 表是否存在。
+- 如果存在 -> 删除它。
+- 如果不存在 -> 忽略该命令，不报错。
+
+*优势*：这种写法被称为“幂等性”操作，无论运行多少次，结果都是安全的，不会导致程序崩溃。
