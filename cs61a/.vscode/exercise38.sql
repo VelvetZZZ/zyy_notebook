@@ -46,3 +46,33 @@ SELECT * FROM primes;
 -- 10|1
 -- 11|1
 -- 12|1
+
+
+-- 1. 筛选 2 的倍数
+-- 将 n > 2 的所有偶数标记为 0 (非素数)。
+UPDATE primes SET prime = 0 WHERE n % 2 = 0 AND n != 2;
+
+-- 2. 检查 2 的筛选结果
+SELECT '--- 筛选 2 的倍数后 ---' AS Status, NULL, NULL;
+SELECT * FROM primes ORDER BY n;
+
+-- 3. 筛选 3 的倍数
+-- 将 n > 3 的所有 3 的倍数标记为 0。
+UPDATE primes SET prime=0 WHERE n>3 AND n%3=0;
+
+-- 4. 检查 3 的筛选结果
+SELECT '--- 筛选 3 的倍数后 ---' AS Status, NULL, NULL;
+SELECT * FROM primes ORDER BY n;
+
+-- 5. 筛选 5 的倍数
+-- 将 n > 5 的所有 5 的倍数标记为 0。
+UPDATE primes SET prime=0 WHERE n>5 AND n%5=0;
+
+-- 6. 最终检查 n=2 到 n=25 的数据
+-- 此时，所有 n <= 25 的非素数都应被标记为 prime=0。
+SELECT '--- 最终结果 (素数标记为 1) ---' AS Status, NULL, NULL;
+SELECT * FROM primes ORDER BY n;
+
+-- 7. 删除所有非素数记录 (prime=0)
+DELETE FROM primes WHERE prime=0;
+SELECT * FROM primes;
