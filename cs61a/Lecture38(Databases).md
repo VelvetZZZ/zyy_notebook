@@ -164,6 +164,8 @@ INSERT INTO t VALUES (value0, value1);
 
 `UPDATE` 语句用于修改数据库表中 **现有行** 的**现有数据**。它只会更改表中部分行的部分列。
 
+*作用*：UPDATE 的作用是根据 SET 子句的指令，将满足 WHERE 条件的行的特定列的值**从旧值改为新值**。
+
 > *定义*： Update sets all entries in certain columns to new values, just for some subset of rows.（UPDATE 为某些列设置新值，但仅针对行的子集。）
 
 ## A. 语法结构 (基于 Railroad Diagram)
@@ -191,14 +193,14 @@ UPDATE [OR resolution] qualified-table-name SET column-name = expr, ... [WHERE e
 指定要更新数据的表名。
 
 ### 3. SET 子句
-这是 `UPDATE` 的核心部分，用于指定要更新的列及其新值。
+这是 `UPDATE` 的核心部分，用于**指定要更新的列及其新值**。（要改成什么）
 
 `SET` 后面跟一个或多个逗号分隔的赋值表达式：`column-name = expr`。
 
 `expr` 可以是**常量、计算结果或子查询**。
 
 ### 4. WHERE 子句 (可选但常用)
-用于指定哪些行应该被更新。
+用于指定哪些行应该被更新。（指定条件）
 
 `WHERE` 后面跟一个表达式 (expr)，只有满足该表达式（即表达式结果为 TRUE）的行才会被修改。
 
