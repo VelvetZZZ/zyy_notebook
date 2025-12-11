@@ -77,7 +77,7 @@ CREATE TABLE numbers (n, note DEFAULT "No comment");
 
 **补充：使用 CREATE TABLE 只是造出了一个空的容器（Empty Table）。**
 
-# Drop Table 
+# `Drop` Table 
 
 ## 1. 核心功能
 `DROP TABLE` 用于从数据库中**彻底删除**一张表。
@@ -207,3 +207,32 @@ UPDATE [OR resolution] qualified-table-name SET column-name = expr, ... [WHERE e
 重要： 如果省略 WHERE 子句，**表中的所有行都会被更新！**
 
 
+# `DELETE`语句学习笔记
+## I. `DELETE` 语句概述
+
+`DELETE` 语句用于从表中删除（移除）一些或所有行。
+
+*定义*： Delete removes some or all rows from a table.（DELETE 从表中移除部分或全部行。）
+
+### A. 语法结构 (基于 Railroad Diagram)
+DELETE 语句的结构相对简单：
+```sql
+DELETE FROM qualified-table-name [WHERE expr];
+```
+### B. 语法组成部分详解
+1. `DELETE FROM`
+这是语句的开头，表示要执行删除操作。
+
+后面紧跟 qualified-table-name（要删除数据的表名）。
+
+2. `WHERE` 子句 (可选但非常重要)
+`WHERE` 后面跟一个表达式 (expr)，用于指定哪些行应该被删除。
+
+只有满足该表达式（结果为 TRUE）的行才会被从表中移除。
+
+*⚠️ 警告*： 如果省略 `WHERE` 子句，表中的所有行都将被删除！
+
+3. 结果
+`DELETE` 成功执行后，满足条件的行将不再存在于表中。
+
+*注意*： 删除行后，**表本身仍然存在**，但表中可能没有任何数据（But that table will have no rows, only empty columns after you delete from it.）。
