@@ -291,3 +291,44 @@ db.execute("INSERT INTO nums VALUES (?),(?),(?);", range(4, 7))
 3. 数据库 API (Python sqlite3)：掌握使用 Python 对象 (db 连接对象) 来封装底层数据库操作的方法。
 4. 事务 (Transactions)：使用 db.commit() 强调了数据库操作需要明确的提交步骤，才能将更改永久化。
 5. 安全编程 (参数化查询)：使用占位符 ? 传入参数，是防止安全漏洞（如 SQL 注入）的黄金法则。
+
+
+
+
+# 🛡️ 数据库核心概念学习笔记
+
+本笔记详细解释了 Python 数据库编程中三个最重要的概念：`参数化查询`、`数据库 API `和`事务`。
+
+---
+
+## 1. 🛡️ 参数化查询 (Parameterized Queries) 与 SQL 注入
+
+参数化查询 (Parameterized Queries) 是一种安全技术，用于将 **SQL 语句的结构** 与要传入的 **数据值** 彻底分离。
+
+### ❌ SQL 注入 (SQL Injection) 漏洞
+
+SQL 注入发生在程序将用户输入**直接拼接**到 SQL 语句中时。恶意用户可以通过输入特殊的字符串来改变 SQL 语句的含义。
+
+**不安全示例 (Python 伪代码):**
+```python
+# 恶意输入： ' OR '1'='1
+user_input = "pass' OR '1'='1" 
+
+# 最终执行的 SQL: SELECT * FROM users WHERE password = 'pass' OR '1'='1';
+# 结果: 绕过密码验证，成功登录。
+```
+
+### ✅ 参数化查询的工作原理
+参数化查询使用 **占位符（如 ? 或 :name）**来定义 `SQL` 语句，将数据值作为独立的参数传入。
+
+**安全示例 (SQLite/Python):**
+```python
+# 1. SQL 语句结构固定，包含占位符
+sql_query = "SELECT * FROM users WHERE username = ? AND password = ?;" 
+
+# 2. 数据值作为单独的参数传入
+db.execute(sql_query, (username_input, password_input))
+```
+
+
+# Database Connections
