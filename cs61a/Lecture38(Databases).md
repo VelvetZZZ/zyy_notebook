@@ -236,3 +236,6 @@ DELETE FROM qualified-table-name [WHERE expr];
 `DELETE` 成功执行后，满足条件的行将不再存在于表中。
 
 *注意*： 删除行后，**表本身仍然存在**，但表中可能没有任何数据（But that table will have no rows, only empty columns after you delete from it.）。
+
+
+# Python 与 SQLite 交互
