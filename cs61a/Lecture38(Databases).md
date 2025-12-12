@@ -239,3 +239,55 @@ DELETE FROM qualified-table-name [WHERE expr];
 
 
 # Python 与 SQLite 交互
+* *核心*:展示如何在 Python 中使用 `sqlite3` 模块来创建和操作一个关系型数据库（SQLite）。
+---
+## I. 💻 右侧：Python 代码 (`ex.py`) 分析
+
+这部分代码演示了连接数据库、定义表结构、插入数据以及查询数据的完整流程。
+
+### 1. 建立连接与导入
+
+| 代码 | 作用 | 知识点 |
+| :--- | :--- | :--- |
+| `import sqlite3` | 导入 Python 内置的 SQLite 数据库驱动模块。 | **模块导入**：使用标准库操作数据库。 |
+| `db = sqlite3.connect("n.db")` | 连接到名为 `n.db` 的数据库文件。如果文件不存在，则创建它。 | **持久化存储**：数据存储在文件中。`db` 是连接对象。 |
+
+### 2. 创建数据表 (`CREATE TABLE`)
+
+```python
+db.execute("CREATE TABLE nums AS SELECT 2 UNION SELECT 3")
+```
+- SQL 语句:` CREATE TABLE nums AS SELECT 2 UNION SELECT 3`
+
+- 作用: 创建一个名为 `nums` 的新表。
+
+- 表包含 **一列** 数据，初始内容是两个值：2 和 3。
+
+表结构: `nums` 表是一个包含单列和两行的表，内容为 (2) 和 (3)。
+
+### 3. 插入数据 (`INSERT INTO`)
+
+```python
+db.execute("INSERT INTO nums VALUES (?),(?),(?);", range(4, 7))
+```
+- SQL 语句: `INSERT INTO nums VALUES (?),(?),(?);`
+    - 使用了三个 (?) 子句，表示在 **一次执行中** 插入 **三行** 数据，每行只有一列。
+
+- Python 参数: `range(4, 7)`，提供值 `4, 5, 6`。
+- 作用: 驱动程序将 $4, 5, 6$ 依次绑定到三个占位符上，实现了三行新数据（$4$, $5$, $6$）的插入。
+- *核心知识点*: **参数化查询 (Parameterized Queries)**。这是防止 SQL 注入 的标准做法，确保传入的值被视为数据。
+
+### 4. 查询与提交
+| 代码 | 作用 | 知识点 |
+|------|------|--------|
+| `print(db.execute("SELECT * FROM nums;").fetchall())` | 执行查询语句，获取所有行数据，并打印出来。 | **数据查询**：`fetchall()` 返回一个列表，列表中的每个元素是一个代表一行数据的元组。 |
+| `db.commit()` | 将所有在内存中的更改（`CREATE TABLE` 和 `INSERT INTO`）永久保存到 `n.db` 文件中。 | **事务管理**：只有提交（`commit`）之后，更改才会被写入磁盘。 |
+
+
+## 总结：
+*核心*：Python 与关系型数据库的接口和基本操作。
+1. 关系型数据库基础 (SQL)：演示了 CREATE TABLE（创建表结构）和 INSERT INTO（插入数据）等核心 SQL 命令。
+2. 持久化存储 (Persistence)：数据写入 .db 文件，证明程序运行结束后数据依然存在。
+3. 数据库 API (Python sqlite3)：掌握使用 Python 对象 (db 连接对象) 来封装底层数据库操作的方法。
+4. 事务 (Transactions)：使用 db.commit() 强调了数据库操作需要明确的提交步骤，才能将更改永久化。
+5. 安全编程 (参数化查询)：使用占位符 ? 传入参数，是防止安全漏洞（如 SQL 注入）的黄金法则。
