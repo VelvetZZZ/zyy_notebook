@@ -329,6 +329,66 @@ sql_query = "SELECT * FROM users WHERE username = ? AND password = ?;"
 # 2. 数据值作为单独的参数传入
 db.execute(sql_query, (username_input, password_input))
 ```
+*核心*： 数据库驱动程序确保传入的参数永远被视为**数据**，而不是 **SQL 代码** 的一部分，从而彻底杜绝了 **SQL 注入**。
 
+## 2. 🗃️ 数据库 API (Application Programming Interface)
+
+数据库 API 是一套标准化的方法和协议，用于编程语言（如 Python）与数据库管理系统（如 SQLite, MySQL）进行通信和操作。
+
+### Python 的 DB-API 2.0 规范
+
+Python 使用 **DB-API 2.0 (PEP 249)** 作为标准规范。这意味着所有符合该标准的数据库模块（如 `sqlite3`）都具有相似的接口。 
+
+**API 的主要功能：**
+
+* **连接 (Connection)**：建立程序与数据库的通信链路。
+    * *示例:* `db = sqlite3.connect("n.db")`
+* **命令传输 (Execution)**：将 SQL 命令发送给数据库。
+    * *示例:* `db.execute(...)`
+* **结果接收 (Fetching)**：将数据库返回的数据转换为程序能理解的格式（如列表、元组）。
+    * *示例:* `cursor.fetchall()`
+
+**意义：** 程序员无需关心底层数据库的细节，只需要调用统一的 API 方法即可操作不同类型的数据库，实现**数据抽象**。
+
+---
+
+## 3. 🔄 事务 (Transactions)
+
+事务是数据库管理系统执行的一系列操作，这些操作被视为一个**不可分割的逻辑工作单元**。事务的目标是确保数据库状态的**一致性**和**可靠性**。
+
+### 事务的 ACID 特性
+
+一个数据库事务通常必须满足以下四个核心特性（ACID）： 
+
+| 特性 | 英文 | 解释 |
+| :--- | :--- | :--- |
+| **原子性** | **A**tomicity | 事务中的所有操作要么**全部完成**，要么**全部失败（回滚）**，不存在中间状态。 |
+| **一致性** | **C**onsistency | 事务执行前后，数据库从一个有效状态转移到另一个有效状态。 |
+| **隔离性** | **I**solation | 多个事务并发执行时，它们的操作互相隔离，互不干扰。 |
+| **持久性** | **D**urability | 事务一旦通过 `commit` 提交，对数据库的改变就是永久性的，即使系统故障也不会丢失。 |
+
+### 事务在代码中的体现
+
+在 Python `sqlite3` 中：
+
+1.  执行 `db.execute(INSERT/UPDATE/DELETE)` 时，更改只发生在**内存缓冲区**中。
+2.  执行 **`db.commit()`**：将内存中的所有更改一次性、永久地写入磁盘文件。
+3.  如果发生错误或程序决定放弃更改，可以执行 **`db.rollback()`**：撤销所有未提交的更改。
+
+**示例（转账场景）：**
+从 A 账户减钱 和 给 B 账户加钱 必须被包含在一个事务中。如果减钱成功而加钱失败，数据库必须回滚，确保 A 的钱没有被扣除（原子性）。
+```python
+# 启动事务 (通常在执行第一个语句时隐式启动)
+try:
+    # 1. 减少 A 的余额
+    db.execute("UPDATE accounts SET balance = balance - 100 WHERE name = 'A'")
+    # 2. 增加 B 的余额
+    db.execute("UPDATE accounts SET balance = balance + 100 WHERE name = 'B'")
+    
+    db.commit() # 成功：将 (1) 和 (2) 永久写入磁盘
+    
+except Exception:
+    db.rollback() # 失败：撤销 (1) 和 (2) 的所有更改
+```
 
 # Database Connections
