@@ -29,3 +29,19 @@ if __name__ == "__main__":
     ])
 
     print(bigs(a))  # 应该输出 4
+
+
+
+## 另一种实现方式，使用可变对象保存计数
+def bigs(t):
+    n = [0]  # 用列表保存计数（可变对象）
+
+    def f(a, x):
+        if a.label > x:
+            n[0] += 1
+
+        for b in a.branches:
+            f(b, max(a.label, x))
+
+    f(t, t.label - 1)
+    return n[0]
