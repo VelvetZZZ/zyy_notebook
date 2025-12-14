@@ -176,3 +176,55 @@ f(t, t.label - 1)
 |--------------|------------------------|
 | 返回值累加   | 无副作用，更偏函数式   |
 | 外部计数器   | 逻辑直观，命令式风格   |
+
+
+# 🛠️ 程序设计方法论 (How to Design Programs - HDP)
+*这套方法论提供了一个结构化的框架，确保在编写函数或程序时能够全面考虑到问题定义、数据结构、函数签名、实现细节和最终测试。*
+
+## 1. 🔍 从问题分析到数据定义 (From Problem Analysis to Data Definitions)
+这是设计的起点。你需要弄清楚程序将要操作的信息和这些信息在程序中如何被表示。
+
+*   - 识别信息 (Identify the information): 确定程序需要处理哪些数据，以及这些数据的结构是什么样的。
+
+    - 制定数据定义 (Formulate data definitions): 明确地定义如何使用所选的编程语言（例如 Python 的列表、字典、类）来表示这些信息。
+
+    - 插图示例 (Illustrate them with examples): 用具体的例子来展示这些数据定义是如何工作的。
+
+## 2. 📝 函数签名、目的和头部 (Signature, Purpose Statement, Header)
+在编写任何代码之前，必须先明确函数的约定和目标。
+
+*   - 函数签名 (Signature): 阐明函数接受什么类型的输入，以及返回什么类型的输出。
+
+    - 目的说明 (Purpose Statement): 用简洁的语言回答函数是用来做什么的，即函数消耗什么信息，并计算出什么期望的结果。
+
+    - 定义头部 (Define a stub): 创建一个只包含函数名、参数和占位符返回值的函数框架（或存根），使其能够被调用但不执行实际计算。
+
+## 3. 🧪 功能示例 (Functional Examples)
+这是驱动程序实现的关键步骤。
+
+*   - 实例说明 (Work through examples): 编写具体的、具有代表性的输入和期望输出的示例（即测试用例）。
+
+    - 目的阐明 (Illustrate the function's purpose): 这些示例清晰地展示了函数在不同情况下的预期行为。
+
+## 4. 🧩 函数模板 (Function Template)
+这是将数据结构直接转化为代码骨架的步骤。
+
+*   - 翻译数据定义 (Translate the data definitions): 将你定义的数据结构（例如树、链表、列表）转化为函数的基本轮廓（模板）。
+
+    - 函数大纲 (Outline of the function): 根据数据结构的组成部分（例如树的根节点和分支），预先写好函数的结构，例如使用 if/else 分支来处理叶子节点和非叶子节点，或者使用 for 循环来处理列表。
+
+5. ✍️ 函数定义 (Function Definition)
+这是实际编写计算逻辑的阶段。
+
+*   - 填补空白 (Fill in the gaps): 在函数模板的基础上，填入实际的计算和逻辑代码。
+
+    - 利用目的和示例 (Exploit the purpose statement and the examples): 利用前面定义的目的说明和功能示例来指导逻辑的实现，确保每一步操作都向着正确的结果推进。
+
+## 6. ✅ 测试 (Testing)
+程序的最后一步是验证其正确性。
+
+*   - 明确示例作为测试 (Articulate the examples as tests): 将之前定义的功能示例转化为可执行的测试（例如使用 Python 的 assert 语句或测试框架）。
+
+    - 确保通过 (Ensure that the function passes all): 运行所有测试，并确保函数通过了它们。
+
+*测试的作用 (Testing's role)*: 测试不仅能发现错误，还能帮助其他人理解函数的定义和在各种边界情况下可能出现的问题。
