@@ -228,3 +228,67 @@ f(t, t.label - 1)
     - 确保通过 (Ensure that the function passes all): 运行所有测试，并确保函数通过了它们。
 
 *测试的作用 (Testing's role)*: 测试不仅能发现错误，还能帮助其他人理解函数的定义和在各种边界情况下可能出现的问题。
+
+
+
+
+
+
+# 🌳 树的递归问题：`smalls(t)` 解题过程笔记
+
+**目标:** 实现 `smalls(t)`，返回所有 **非叶子节点** 的列表，这些节点的标签必须 **小于** 它们所有 **后代节点** 的标签。
+
+**核心挑战:** 这个问题需要 **双向信息流**：从下到上返回数值（最小后代），同时从上到下收集结果（副作用）。
+
+---
+
+## I. 模式设计：双重函数 (Two-Function Pattern)
+
+由于函数既要返回一个用于计算的数值，又要收集节点列表，我们采用双重函数模式：
+
+| 函数 | 职责 | 信息流向 | 关键操作 |
+| :--- | :--- | :--- | :--- |
+| **`smalls(t)`** | **外部接口**：初始化结果列表，启动递归。 | N/A | `result = []; process(t); return result` |
+| **`process(t)`** | **内部辅助**：遍历树，返回计算所需的数值。 | 从下到上 | **返回最小后代标签**。 |
+
+---
+
+## II. 内部函数 `process(t)` 详解
+
+`process(t)` 的目标是：**返回 $t$ 所在子树中的最小标签（包括 $t$ 自身和所有后代）**，并在发现满足条件的节点时，将其加入外部的 `result` 列表。
+
+### 1. 函数签名
+
+* **签名:** `def process(t)`
+* **返回类型:** `number` (子树中的最小标签)。
+
+### 2. 逻辑分解 (递归三步走)
+
+| 步骤 | 逻辑描述 | 对应的代码实现 |
+| :--- | :--- | :--- |
+| **A. 基本情况** | 如果是叶子节点，最小标签就是它自己。 | `if t.is_leaf(): return t.label` |
+| **B. 向下递归 (汇总)** | 找到所有子树 $b$ 中返回的最小标签，并取其中的最小值。 | `smallest = min([process(b) for b in t.branches])` |
+| **C. 核心判断与副作用** | **判断** 当前节点 $t$ 是否小于所有后代。 | `if t.label < smallest:` |
+| - | **副作用**：满足条件则将节点 $t$ 加入外部列表。 | `result.append(t)` |
+| **D. 向上返回 (最小标签)** | 返回当前子树的最小标签，供父节点使用。该值是 **后代最小标签** 和 **当前标签** 两者中的最小值。 | `return min(smallest, t.label)` |
+
+### 示例代码框架 (结合外部 `result` 列表)
+
+```python
+# 假设 result 在外部定义 (在 smalls 函数内部)
+# result = [] 
+
+def process(t):
+    if t.is_leaf():
+        return t.label
+    else:
+        # 1. 向下递归，收集所有子树的最小标签
+        smallest_in_descendants = min([process(b) for b in t.branches]) 
+        
+        # 2. 核心判断：当前节点是否小于所有后代中的最小值
+        if t.label < smallest_in_descendants:
+            result.append(t) # 副作用：收集节点
+            
+        # 3. 向上返回：返回当前子树的最小标签 (包括 t 本身)
+        return min(smallest_in_descendants, t.label)
+```
