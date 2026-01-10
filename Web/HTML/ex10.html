@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS伪类大练兵</title>
+    <style>
+        /* 1. 基础样式：去掉下划线，设个大字体 */
+        a {
+            text-decoration: none; /* 去掉下划线 */
+            font-size: 24px;
+            font-weight: bold;
+            display: inline-block; /* 让你看得更清楚 */
+            padding: 10px 20px;
+            border: 2px solid #ccc; /* 加个边框 */
+            margin: 10px;
+        }
+
+        /* --- 2. 严格按照 LoVe HAte 顺序 --- */
+
+        /* L: 未访问 (Link) - 蓝色 */
+        a:link {
+            color:blue;
+            background-color: #f0f0f0
+        }
+
+        /* V: 已访问 (Visited) - 紫色 */
+        /* 注意：浏览器为了隐私，现在对 visited 能改的样式很有限，主要是颜色 */
+        a:visited {
+            color:purple;
+            background-color: #f0f0f0;
+        }
+
+
+        /* H: 悬停 (Hover) - 橙色背景，白色字 */
+        /* 这是交互的核心！ */
+       a:hover {
+            color:white;
+            background-color:orange;
+            border-color:orange;
+            cursor:pointer; /* 鼠标变手指 */
+       }
+
+
+        /* A: 激活/按下 (Active) - 红色 */
+        a:active {
+            background-color: red;
+            transform: scale(0.95); /* 按下时稍微缩小 */
+        }
+
+
+    </style>
+</head>
+<body>
+    <h2>CSS 伪类测试 (LVHA原则)</h2>
+    
+    <a href="#">模拟链接1</a>
+    <a href="http://www.baidu.com" target="_blank">百度一下</a>
+    <a href="http://www.non-existent-site.com">从未去过的网站</a>
+
+</body>
+</html>
