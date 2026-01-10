@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS关系选择器大练兵</title>
+    <style>
+        /* 1.  后代选择器（空格）*/
+        /* 选中 .grandpa 里所有的 p （包括儿子和孙子）*/
+        .grandpa p {
+            color:blue;
+        }
+
+        /* 2. 子代选择器 (>)*/
+        /* 只选中 #father 的亲儿子p */
+        #father > p {
+            color: purple;
+            font-weight: bold;
+        }
+
+        /* 3. 交集选择器（无符号）*/
+        /* 选中既是 div 又是 class="special" 的元素 */
+        div.special {
+            color: green;
+            border: 1px solid greem;
+        }
+        
+        /* 4. 并集选择器（逗号）*/
+        /* 让 h2，h3 和 p 标签都加上下划线 */
+        h2, h3, .group-text {
+            text-decoration: underline;
+        }
+
+        /*5. 兄弟选择器（+） */
+        /* 选中紧跟在 h1 后面的那个 h2 */
+        h1 + h2 {
+            font-style: italic;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>--- 1. 后代选择器示例 ---</h2>
+    <div class="grandpa">
+        <section>
+        <p>我是亲儿子（变蓝）</p>
+        </section>
+    </div>
+    <p>我是路人（不变色）</p>
+
+
+    <hr>
+
+    <h2>--- 2. 子代选择器示例 ---</h2>
+    <div id="father">
+        <p>我是Father的亲儿子（变紫）</p>
+        <div id="son">
+            <p>我是Father的孙子（不变紫，因为用了 > )</p>
+        </div>
+    </div>
+
+    <h2>--- 3. 交集选择器示例 ---</h2>
+    <div class="special">我是div且带有special类 (变绿)</div>
+    <p class="special">我是p但带有special类 (不变绿，因为CSS指定了div.special)</p>
+
+    <hr>
+
+    <h2>--- 4. 并集选择器示例 ---</h2>
+    <h3>我是h3 (有下划线)</h3>
+    <p class="group-text">我是p (有下划线)</p>
+
+    <hr>
+
+    <h2>--- 5. 兄弟选择器示例 ---</h2>
+    <h1>我是大哥H1</h1>
+    <h2>我是紧跟在大哥后面的二弟H2 (变红斜体)</h2>
+    <h2>我是三弟H2 (不变，因为不紧跟H1)</h2>
+    
+</body>
+</html>
