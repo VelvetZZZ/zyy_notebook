@@ -12,5 +12,9 @@ public class ex03 {
         char h = '\u0041'; // 正确，\u0041是'A'的Unicode码,后面必须跟4位16进制数
         char i = 65535; // 正确，char的取值范围是0~65535
         System.out.println(h);
+
+        char j = '\''; // 正确，使用转义字符表示单引号
+        System.out.println(j);
+        System.out.println('A'+'A'); // 正确，输出130=65+65
     }
 }
