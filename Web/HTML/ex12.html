@@ -1,0 +1,31 @@
+<style>
+    .nav {
+        /* 1. 开启 Flex 布局 */
+        display: flex;
+        /* 2. 主轴对齐：两端贴边，中间平分 */
+        justify-content: space-between;
+        
+        width: 600px;
+        height: 50px;
+        background-color: #eee;
+    }
+    .nav span {
+        width: 100px;
+        height: 40px;
+        background-color: skyblue;
+        /* 侧轴(垂直)居中 */
+        align-items: center; /* 注意：这里其实应该写在父元素 .nav 上，或者单独处理 */
+    }
+    /* 修正写法：align-items 必须写在容器上 */
+    .nav-fixed {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* 让子元素在垂直方向居中 */
+    }
+</style>
+
+<div class="nav-fixed">
+    <span>首页</span>
+    <span>新闻</span>
+    <span>关于我们</span>
+</div>

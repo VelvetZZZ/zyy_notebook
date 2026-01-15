@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>文本样式综合练习</title>
+    <style>
+        .news-card {
+            width: 300px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        /* 1. 标题特效：加阴影，居中 */
+        h2 {
+            text-align: center;                  /* 居中对齐 */
+            text-shadow: 2px 2px 4px #888;       /* 文字阴影 */
+            text-transform: uppercase;           /* 英文全大写 */
+            color: #333;
+        }
+
+        /* 2. 正文排版：首行缩进，行高舒适 */
+        p {
+            font-size: 14px;
+            line-height: 1.5;                    /* 1.5倍行高 */
+            text-indent: 2em;                    /* 首行缩进2个字 */
+            color: #555;
+            text-decoration: underline;          /* 加下划线测试 */
+        }
+
+        /* 3. 长链接处理：强制换行 */
+        .link-text {
+            color: blue;
+            word-wrap: break-word;               /* 防止长单词撑破盒子 */
+            text-decoration: none;               /* 去掉下划线 */
+            display: block;
+            margin-top: 10px;
+        }
+
+        /* 4. 单行省略号 (重点!) */
+        .summary {
+            width: 100%;
+            background: #f9f9f9;
+            /* 必背三件套 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="news-card">
+        <h2>Breaking News</h2>
+        
+        <p>
+            这是一个非常重要的新闻段落。我们使用 text-indent 实现了首行缩进，看起来更像报纸排版。
+        </p>
+
+        <div class="summary">
+            这是一个非常非常长的新闻摘要，如果它超过了盒子的宽度，后面就会自动变成省略号...
+        </div>
+
+        <a href="#" class="link-text">
+            http://www.very-long-website-address-example-for-testing-word-wrap.com
+        </a>
+    </div>
+
+</body>
+</html>
