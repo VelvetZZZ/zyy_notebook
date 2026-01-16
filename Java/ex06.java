@@ -5,4 +5,4 @@ public class ex06 {
         System.out.println(5 >>> 1);//2
         System.out.println(-5 >>> 1);//2147483645
     }}
-}
+
